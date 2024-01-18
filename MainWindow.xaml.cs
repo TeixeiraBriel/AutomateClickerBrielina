@@ -71,6 +71,7 @@ namespace AutomateClickerBrielina
                 {
                     do
                     {
+                        imprimeConsole($"--CTRL + ENTER para Parar--");
                         if (loop)
                         {
                             imprimeConsole($"Pausa de segurança 15s");
