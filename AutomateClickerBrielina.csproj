@@ -68,6 +68,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\AdicionarCliquePosicional.xaml.cs">
+      <DependentUpon>AdicionarCliquePosicional.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GerenciaFluxo.xaml.cs">
+      <DependentUpon>GerenciaFluxo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SalvarPrint.xaml.cs">
       <DependentUpon>SalvarPrint.xaml</DependentUpon>
     </Compile>
@@ -80,6 +86,14 @@
     <Compile Include="Util\CapturaTelas.cs" />
     <Compile Include="Util\JsonUtil.cs" />
     <Compile Include="Util\Timer.cs" />
+    <Page Include="Controls\AdicionarCliquePosicional.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\GerenciaFluxo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\SalvarPrint.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

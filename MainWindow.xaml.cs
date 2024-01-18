@@ -54,13 +54,6 @@ namespace AutomateClickerBrielina
 
         void iniciaCliques(bool loop)
         {
-
-            if (AdicionarCliquePanel.Visibility != Visibility.Visible)
-            {
-                return;
-            }
-
-            AdicionarCliquePanel.Visibility = Visibility.Hidden;
             Console.Children.Clear();
             cancellationTokenSource = new CancellationTokenSource();
             CancellationToken token = cancellationTokenSource.Token;
@@ -104,11 +97,9 @@ namespace AutomateClickerBrielina
                     } while (loop && !token.IsCancellationRequested);
 
                     imprimeConsole($"FIM");
-                    Dispatcher.Invoke(new Action(() => { AdicionarCliquePanel.Visibility = Visibility.Visible; }));
                 }
                 catch
                 {
-                    Dispatcher.Invoke(new Action(() => { AdicionarCliquePanel.Visibility = Visibility.Visible; }));
                     imprimeConsole("Loop Encerrado!");
                 }
             }, token);
@@ -126,11 +117,6 @@ namespace AutomateClickerBrielina
             }
         }
 
-        private void btnPosMouseClick(object sender, RoutedEventArgs e)
-        {
-            Transparente novaJanelaTransparente = new Transparente(this, "Clique");
-            novaJanelaTransparente.Show();
-        }
         private void btnNomeJanelaClick(object sender, RoutedEventArgs e)
         {
             MonitoraJanelas = !MonitoraJanelas;
@@ -172,6 +158,10 @@ namespace AutomateClickerBrielina
 
         private void btnGerenciarClick(object sender, RoutedEventArgs e)
         {
+            new GerenciaFluxo(Cliques).Show();
+            this.Close();
+            return;
+
             Console.Children.Clear();
             foreach (var clique in Cliques)
             {
@@ -185,56 +175,6 @@ namespace AutomateClickerBrielina
                 if (clique.PosSleep > 0)
                     imprimeConsole($"Aguardar {clique.PosSleep}");
             }
-        }
-        private void NumerosTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (!Char.IsDigit(e.Text, 0))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void AdicionarCliqueClick(object sender, RoutedEventArgs e)
-        {
-
-            if (!string.IsNullOrEmpty(CliqueQtdInput.Text) &&
-                !string.IsNullOrEmpty(CliquesintervaloInput.Text) &&
-                !string.IsNullOrEmpty(PreIntervaloInput.Text) &&
-                !string.IsNullOrEmpty(PosIntervaloInput.Text) &&
-                CliqueSelecionado)
-            {
-                Cliques.Add(new Clique()
-                {
-                    posX = PosXVal,
-                    posY = PosYVal,
-                    qtdCliques = int.Parse(CliqueQtdInput.Text),
-                    TempoIntervalo = int.Parse(CliquesintervaloInput.Text),
-                    PreSleep = int.Parse(PreIntervaloInput.Text),
-                    PosSleep = int.Parse(PosIntervaloInput.Text)
-                });
-
-                CliqueQtdInput.Text = string.Empty;
-                CliquesintervaloInput.Text = string.Empty;
-                PreIntervaloInput.Text = string.Empty;
-                PosIntervaloInput.Text = string.Empty;
-                CliqueSelecionado = false;
-            }
-        }
-
-        private void SelecionarCliqueClick(object sender, RoutedEventArgs e)
-        {
-            SelecionarClique = true;
-            Transparente novaJanelaTransparente = new Transparente(this, "Clique");
-            novaJanelaTransparente.Show();
-            CliqueSelecionado = true;
-
-            AdicionarCliqueBtnsPanel.IsEnabled = false;
-        }
-
-        private void btnRemoverUltimoClick(object sender, RoutedEventArgs e)
-        {
-            if (Cliques.Count > 0)
-                Cliques.Remove(Cliques.Last());
         }
 
         private void btnStopClick(object sender, RoutedEventArgs e)
@@ -320,55 +260,19 @@ namespace AutomateClickerBrielina
 
         private void btnTesteClick(object sender, RoutedEventArgs e)
         {
-            Transparente novaJanelaTransparente = new Transparente(this, "Print");
-            novaJanelaTransparente.Show();
-        }
-
-        private void btnTesteClick_old(object sender, RoutedEventArgs e)
-        {
-            Fluxo fluxo = new Fluxo();
-
-            Acao c1 = new Acao()
+            var teste = CapturaTelas.ListaNomesPrints();
+            (bool Existe, int X, int Y) saida = CapturaTelas.ValidaMoveImagem(teste.LastOrDefault());
+            if (saida.Existe)
             {
-                action = new Action(() =>
-                {
-                    imprimeConsole("c1");
-                })
-            };
-
-            Laco c2 = new Laco();
-            c2.Acoes.Add(new Acao() { action = new Action(() => imprimeConsole("c2a")) });
-            c2.Repeticoes = 5;
-
-            Acao c3 = new Acao()
+                AutoItX.MouseMove(saida.X,saida.Y);
+                AutoItX.MouseClick("Left");
+                AutoItX.MouseClick("Left");
+                imprimeConsole( $"Print encontrado " +
+                                $"\nclique realizado em X:{saida.X} Y:{saida.Y}");
+            }
+            else
             {
-                action = new Action(() =>
-                {
-                    imprimeConsole("c3");
-                })
-            };
-
-            fluxo.comandos.Add(c1);
-            fluxo.comandos.Add(c2);
-            fluxo.comandos.Add(c3);
-
-            foreach (var cmd in fluxo.comandos)
-            {
-                int repeticoes = cmd.Tipo == 0 ? 1 : (cmd as Laco).Repeticoes;
-                for (int i = 0; i < repeticoes; i++)
-                {
-                    if (repeticoes > 1)
-                    {
-                        foreach (Acao acao in (cmd as Laco).Acoes)
-                        {
-                            acao.executar();
-                        }
-                    }
-                    else
-                    {
-                        (cmd as Acao).executar();
-                    }
-                }
+                imprimeConsole("Print não encontrado");
             }
         }
 
@@ -408,6 +312,28 @@ namespace AutomateClickerBrielina
         {
             CONTROL = 0x11,
             RETURN = 0x0D,
+        }
+
+        //Em Desenvolvimento
+        void novoMetodoFluxo()
+        {
+            Fluxo fluxo = new Fluxo();
+            fluxo.AdicionaAcao(this, "Teste1", 300, 300);
+
+            Laco c2 = new Laco() { Repeticoes = 5 };
+            c2.AdicionaAcao(this, "Teste2", 350, 350);
+
+            fluxo.AdicionaLaco(c2);
+
+            fluxo.AdicionaAcao(this, "Teste3", 300, 300);
+
+            fluxo.Run();
+        }
+
+        private void btnNovaImagemClick(object sender, RoutedEventArgs e)
+        {
+            Transparente novaJanelaTransparente = new Transparente(null, "Print");
+            novaJanelaTransparente.Show();
         }
     }
 }

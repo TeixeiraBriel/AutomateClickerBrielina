@@ -27,63 +27,18 @@
             <StackPanel x:Name="PainelBotoes">
                 <Button Content="Iniciar" Width="100" Margin="2" Click="btnInciarClick"/>
                 <Button Content="Gerenciar" Width="100" Margin="2" Click="btnGerenciarClick"/>
-                <Button Content="Posição Mouse" Width="100" Margin="2" Click="btnPosMouseClick" Visibility="Collapsed"/>
-                <Button Content="Nome Janela" Width="100" Margin="2" Click="btnNomeJanelaClick" Visibility="Collapsed"/>
-                <Button Content="Remover Ultimo" Width="100" Margin="2" Click="btnRemoverUltimoClick"/>
                 <Button Content="Loop" Width="100" Margin="2" Click="btnLoopClick"/>
                 <Button Content="Saves" Width="100" Margin="2" Click="btnSavesClick"/>
+                <Button Content="Nova Imagem" Width="100" Margin="2" Click="btnNovaImagemClick"/>
                 <Button Content="Teste" Width="100" Margin="2" Click="btnTesteClick"/>
             </StackPanel>
             <Button Content="Stop" Width="100" Margin="2" Click="btnStopClick"/>
         </StackPanel>
 
         <Label x:Name="AvisoLbl" Content="BuscandoJanela" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center" Foreground="Green" Visibility="Hidden"/>
-        <StackPanel 
-            x:Name="AdicionarCliquePanel" 
-            Grid.Row="1" 
-            Grid.Column="2" 
-            Grid.ColumnSpan="2" 
-            Visibility="Visible"
-            Background="LightGray"
-            Margin="5">
 
-            <StackPanel Margin="5">
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Label x:Name="PosXlbl" Content="PosX: "/>
-                    <Label x:Name="PosYlbl" Content="PosY: "/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Cliques:"/>
-                        <TextBox x:Name="CliqueQtdInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Intervalo:"/>
-                        <TextBox x:Name="CliquesintervaloInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Pre Intervalo:"/>
-                    <TextBox x:Name="PreIntervaloInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Pos Intervalo:"/>
-                    <TextBox x:Name="PosIntervaloInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" x:Name="AdicionarCliqueBtnsPanel">
-                    <Button Content="Selecionar" Click="SelecionarCliqueClick" Width="100" Margin="0,5,5,0"/>
-                    <Button Content="Adicionar" Click="AdicionarCliqueClick" Width="100" Margin="0,5,0,0"/>
-                </StackPanel>
-            </StackPanel>
-        </StackPanel>
-
-        <Rectangle Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Grid.RowSpan="2" Fill="Black"/>
-        <ScrollViewer Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0,0,0,0" x:Name="ScrollConsole">
+        <Rectangle Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="3" Fill="Black"/>
+        <ScrollViewer Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="3" Margin="0,0,0,0" x:Name="ScrollConsole">
             <StackPanel x:Name="Console"/>
         </ScrollViewer>
 

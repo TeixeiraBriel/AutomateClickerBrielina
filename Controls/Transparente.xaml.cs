@@ -22,11 +22,11 @@ namespace AutomateClickerBrielina.Controls
     /// </summary>
     public partial class Transparente : Window
     {
-        private MainWindow JanelaPai;
+        private AdicionarCliquePosicional JanelaPai;
         private bool isDragging = false;
         private System.Windows.Point startPoint;
 
-        public Transparente(MainWindow _janelaPai, string Funcionalidade)
+        public Transparente(AdicionarCliquePosicional _janelaPai, string Funcionalidade)
         {
             InitializeComponent();
             JanelaPai = _janelaPai;
@@ -61,7 +61,7 @@ namespace AutomateClickerBrielina.Controls
                 JanelaPai.PosYVal = valor.Y;
                 if (!JanelaPai.SelecionarClique)
                 {
-                    JanelaPai.imprimeConsole($"Mouse pos: {valor}");
+                    System.Windows.MessageBox.Show($"Mouse pos: {valor}");
                 }
                 else
                 {
@@ -102,8 +102,9 @@ namespace AutomateClickerBrielina.Controls
                     int width = int.Parse((finalPoint.X - startPoint.X).ToString());
                     int height = int.Parse((finalPoint.Y - startPoint.Y).ToString());
 
-                    var print = CapturaTelas.CapturaSelecao(left, top, width, height);
                     this.Close();
+                    System.Threading.Thread.Sleep(1000);
+                    var print = CapturaTelas.CapturaSelecao(left, top, width, height);
                     new SalvarPrint(print).Show();
                 }
             }

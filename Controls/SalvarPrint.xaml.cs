@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
@@ -55,7 +56,6 @@ namespace AutomateClickerBrielina.Controls
 
             Print.Save($"Prints\\{inputName.Text}.png", ImageFormat.Png);
             this.Close();
-            CapturaTelas.ListaNomesPrints();
         }
 
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]

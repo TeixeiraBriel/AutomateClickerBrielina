@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoIt;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,24 @@ namespace AutomateClickerBrielina.Entidades
         public void executar()
         {
             action.Invoke();
+        }
+
+        public static Acao CriarAcao(MainWindow Mw, string Descricao, int PosX, int PosY, bool Move = true, bool Click = true)
+        {
+            Acao acao = new Acao()
+            {
+                action = new Action(() =>
+                {
+                    Mw.imprimeConsole(Descricao);
+
+                    if (Move)
+                        AutoItX.MouseMove(PosX, PosY);
+                    if (Click)
+                        AutoItX.MouseClick("left");
+                })
+            };
+
+            return acao;
         }
     }
 }
