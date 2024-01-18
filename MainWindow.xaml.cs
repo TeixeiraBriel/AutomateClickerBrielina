@@ -12,9 +12,7 @@ using System.Threading;
 using AutoIt;
 using AutomateClickerBrielina.Entidades;
 using AutomateClickerBrielina.Util;
-using System.Diagnostics;
-using System.Drawing.Imaging;
-using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace AutomateClickerBrielina
 {
@@ -44,11 +42,13 @@ namespace AutomateClickerBrielina
 
         private async void btnInciarClick(object sender, RoutedEventArgs e)
         {
+            Task.Run(() => PararRobo());
             iniciaCliques(loop: false);
         }
 
         private void btnLoopClick(object sender, RoutedEventArgs e)
         {
+            Task.Run(() => PararRobo());
             iniciaCliques(loop: true);
         }
 
@@ -74,7 +74,7 @@ namespace AutomateClickerBrielina
                         if (loop)
                         {
                             imprimeConsole($"Pausa de segurança 15s");
-                            Thread.Sleep(15 * 1000);
+                            Esperar(15);
                         }
 
                         foreach (var clique in Cliques)
@@ -82,7 +82,7 @@ namespace AutomateClickerBrielina
                             if (clique.PreSleep > 0)
                             {
                                 imprimeConsole($"Aguardando {(clique.PreSleep)}s");
-                                Thread.Sleep(clique.PreSleep * 1000);
+                                Esperar(clique.PreSleep);
                             }
 
                             for (int i = 0; i < clique.qtdCliques; i++)
@@ -90,13 +90,13 @@ namespace AutomateClickerBrielina
                                 clickTaskValida(clique.posX, clique.posY, !token.IsCancellationRequested);
                                 imprimeConsole($"Clique X:{clique.posX} Y:{clique.posY}");
                                 imprimeConsole($"Aguardando {(clique.TempoIntervalo)}s");
-                                Thread.Sleep(clique.TempoIntervalo * 1000);
+                                Esperar(clique.TempoIntervalo);
                             }
 
                             if (clique.PosSleep > 0)
                             {
                                 imprimeConsole($"Aguardando {(clique.PosSleep)}s");
-                                Thread.Sleep(clique.PosSleep * 1000);
+                                Esperar(clique.PosSleep);
                             }
                         }
 
@@ -369,6 +369,44 @@ namespace AutomateClickerBrielina
                     }
                 }
             }
+        }
+
+        async Task PararRobo()
+        {
+            while (!IsKeyPressed(VirtualKeyCode.CONTROL) || !IsKeyPressed(VirtualKeyCode.RETURN))
+            {
+                //travaaq
+            }
+
+
+            if (cancellationTokenSource != null)
+                cancellationTokenSource.Cancel();
+            MessageBox.Show("Cancelamento solicitado");
+        }
+
+        static bool IsKeyPressed(VirtualKeyCode keyCode)
+        {
+            return (GetAsyncKeyState(keyCode) & 0x8000) != 0;
+        }
+
+        public void Esperar(int segundos)
+        {
+            int tempo = segundos * 2;
+
+            while (tempo > 0 && !cancellationTokenSource.IsCancellationRequested)
+            {
+                Thread.Sleep(500);
+                tempo--;
+            }
+        }
+
+        [DllImport("user32.dll")]
+        static extern short GetAsyncKeyState(VirtualKeyCode vKey);
+
+        public enum VirtualKeyCode : int
+        {
+            CONTROL = 0x11,
+            RETURN = 0x0D,
         }
     }
 }

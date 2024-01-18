@@ -24,17 +24,19 @@
 
         <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
             <Label Content="Menu" HorizontalAlignment="Center"/>
-            <Button Content="Iniciar" Width="100" Margin="2" Click="btnInciarClick"/>
-            <Button Content="Gerenciar" Width="100" Margin="2" Click="btnGerenciarClick"/>
-            <Button Content="Posição Mouse" Width="100" Margin="2" Click="btnPosMouseClick" Visibility="Collapsed"/>
-            <Button Content="Nome Janela" Width="100" Margin="2" Click="btnNomeJanelaClick" Visibility="Collapsed"/>
-            <Button Content="Remover Ultimo" Width="100" Margin="2" Click="btnRemoverUltimoClick"/>
-            <Button Content="Loop" Width="100" Margin="2" Click="btnLoopClick"/>
+            <StackPanel x:Name="PainelBotoes">
+                <Button Content="Iniciar" Width="100" Margin="2" Click="btnInciarClick"/>
+                <Button Content="Gerenciar" Width="100" Margin="2" Click="btnGerenciarClick"/>
+                <Button Content="Posição Mouse" Width="100" Margin="2" Click="btnPosMouseClick" Visibility="Collapsed"/>
+                <Button Content="Nome Janela" Width="100" Margin="2" Click="btnNomeJanelaClick" Visibility="Collapsed"/>
+                <Button Content="Remover Ultimo" Width="100" Margin="2" Click="btnRemoverUltimoClick"/>
+                <Button Content="Loop" Width="100" Margin="2" Click="btnLoopClick"/>
+                <Button Content="Saves" Width="100" Margin="2" Click="btnSavesClick"/>
+                <Button Content="Teste" Width="100" Margin="2" Click="btnTesteClick"/>
+            </StackPanel>
             <Button Content="Stop" Width="100" Margin="2" Click="btnStopClick"/>
-            <Button Content="Saves" Width="100" Margin="2" Click="btnSavesClick"/>
-            <Button Content="Teste" Width="100" Margin="2" Click="btnTesteClick"/>
         </StackPanel>
-        
+
         <Label x:Name="AvisoLbl" Content="BuscandoJanela" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center" Foreground="Green" Visibility="Hidden"/>
         <StackPanel 
             x:Name="AdicionarCliquePanel" 
