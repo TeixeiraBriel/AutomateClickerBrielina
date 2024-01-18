@@ -24,10 +24,10 @@ namespace AutomateClickerBrielina
         private bool CliqueSelecionado = false;
         private bool MonitoraJanelas = false;
         private string janelaAtiva = "";
-        private List<Clique> Cliques;
         Task taskExecute;
         CancellationTokenSource cancellationTokenSource;
 
+        public static List<Clique> Cliques;
         public int PosXVal = 0;
         public int PosYVal = 0;
         public bool SelecionarClique = false;
@@ -159,22 +159,6 @@ namespace AutomateClickerBrielina
         private void btnGerenciarClick(object sender, RoutedEventArgs e)
         {
             new GerenciaFluxo(Cliques).Show();
-            this.Close();
-            return;
-
-            Console.Children.Clear();
-            foreach (var clique in Cliques)
-            {
-                if (clique.PreSleep > 0)
-                    imprimeConsole($"Aguardar {clique.PreSleep}");
-
-                imprimeConsole($"Clica {clique.qtdCliques} vezes");
-                imprimeConsole($"PosX:{clique.posX} PosY:{clique.posY}");
-                imprimeConsole($"Com intervalo de {clique.TempoIntervalo}");
-
-                if (clique.PosSleep > 0)
-                    imprimeConsole($"Aguardar {clique.PosSleep}");
-            }
         }
 
         private void btnStopClick(object sender, RoutedEventArgs e)
@@ -328,12 +312,6 @@ namespace AutomateClickerBrielina
             fluxo.AdicionaAcao(this, "Teste3", 300, 300);
 
             fluxo.Run();
-        }
-
-        private void btnNovaImagemClick(object sender, RoutedEventArgs e)
-        {
-            Transparente novaJanelaTransparente = new Transparente(null, "Print");
-            novaJanelaTransparente.Show();
         }
     }
 }

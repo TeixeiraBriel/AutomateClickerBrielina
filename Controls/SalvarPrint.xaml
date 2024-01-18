@@ -18,12 +18,16 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="10">
             <TextBlock Text="Nome Arquivo:"/>
-            <TextBox x:Name="inputName" Width="450" Margin="5,0,5,0"/>
+            <TextBox x:Name="inputName" Width="350" Margin="5,0,5,0"/>
             <Button Content="Salvar"  Width="100" Height="20" Click="Salvar"/>
-            <Button Content="Cancelar"  Width="100" Height="20" Click="FecharJanela" Margin="5,0,5,0"/>
+            <Button Content="Carregar"  Width="100" Height="20" Click="Carregar" Margin="5,0,5,0"/>
+            <Button Content="Cancelar"  Width="100" Height="20" Click="FecharJanela" />
         </StackPanel>
 
         <Image x:Name="imagePanel" Source="../Prints/lastPrint.png" Grid.Row="3" MaxHeight="300" MaxWidth="750" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <!--<Image x:Name="imagePanel" Source="../Prints/lastPrint.png" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
+
+        <StackPanel  Grid.Row="4" HorizontalAlignment="Right" Margin="0,0,15,0" Orientation="Horizontal">
+            <Button Content="Adicionar Clique"  Width="100" Height="20" Click="AdicionarClique"/>
+        </StackPanel>
     </Grid>
 </Window>

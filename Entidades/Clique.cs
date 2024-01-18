@@ -14,5 +14,7 @@ namespace AutomateClickerBrielina.Entidades
         public int PosSleep { get; set; }
         public int qtdCliques { get; set; }
         public int TempoIntervalo { get; set; }
+        public string FileName { get; set; }
+        public bool Imagem { get; set; }
     }
 }

@@ -29,7 +29,6 @@
                 <Button Content="Gerenciar" Width="100" Margin="2" Click="btnGerenciarClick"/>
                 <Button Content="Loop" Width="100" Margin="2" Click="btnLoopClick"/>
                 <Button Content="Saves" Width="100" Margin="2" Click="btnSavesClick"/>
-                <Button Content="Nova Imagem" Width="100" Margin="2" Click="btnNovaImagemClick"/>
                 <Button Content="Teste" Width="100" Margin="2" Click="btnTesteClick"/>
             </StackPanel>
             <Button Content="Stop" Width="100" Margin="2" Click="btnStopClick"/>

@@ -12,7 +12,7 @@
                 <TextBlock Text="Descrição:" Margin="15,5,5,5"/>
                 <TextBox x:Name="inputDesc" Width="300" Margin="5"/>
                 <Button Content="Adicionar Posicional" Margin="5" Click="AdicionarPosicionalClick"/>
-                <Button Content="Adicionar Imagem" Margin="5"/>
+                <Button Content="Adicionar Imagem" Margin="5" Click="AdicionarImagemClick"/>
             </StackPanel>
             <StackPanel x:Name="PainelFluxo"/>
         </StackPanel>

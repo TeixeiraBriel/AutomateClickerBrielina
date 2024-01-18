@@ -1,4 +1,5 @@
 ﻿using AutomateClickerBrielina.Entidades;
+using AutomateClickerBrielina.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,22 +24,14 @@ namespace AutomateClickerBrielina.Controls
     {
         List<Clique> Cliques;
         bool Navegando;
+
         public GerenciaFluxo(List<Clique> cliques)
         {
             InitializeComponent();
 
             Cliques = cliques;
             inicializaDetalhesFluxo();
-            Closing += AoFechar;
             Navegando = false;
-        }
-
-        private void AoFechar(object sender, CancelEventArgs e)
-        {
-            if (!Navegando)
-            {
-                new MainWindow().Show();
-            }
         }
 
         void inicializaDetalhesFluxo()
@@ -53,9 +46,49 @@ namespace AutomateClickerBrielina.Controls
                 btnMove.Content = "Move";
                 btnMove.Click += (s, e) =>
                 {
+                    if (clique.Imagem)
+                    {
+                        (bool Existe, int X, int Y) saida = CapturaTelas.ValidaMoveImagem(clique.FileName);
+                        if (saida.Existe)
+                        {
+                            clique.posX = saida.X;
+                            clique.posY = saida.Y;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Imagem não encontrada!");
+                            return;
+                        }
+                    }
+
                     AutoIt.AutoItX.MouseMove(clique.posX, clique.posY);
                 };
+
                 painel.Children.Add(btnMove);
+
+                Button btnRun = new Button();
+                btnRun.Content = "Executar";
+                btnRun.Click += (s, e) =>
+                {
+                    if (clique.Imagem)
+                    {
+                        (bool Existe, int X, int Y) saida = CapturaTelas.ValidaMoveImagem(clique.FileName);
+                        if (saida.Existe)
+                        {
+                            clique.posX = saida.X;
+                            clique.posY = saida.Y;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Imagem não encontrada!");
+                            return;
+                        }
+                    }
+
+                    AutoIt.AutoItX.MouseMove(clique.posX, clique.posY);
+                    AutoIt.AutoItX.MouseClick();
+                };
+                painel.Children.Add(btnRun);
 
                 Button btnExcluir = new Button();
                 btnExcluir.Content = "Excluir";
@@ -73,7 +106,12 @@ namespace AutomateClickerBrielina.Controls
         private void AdicionarPosicionalClick(object sender, RoutedEventArgs e)
         {
             new AdicionarCliquePosicional(Cliques).Show();
-            Navegando = true;
+            this.Close();
+        }
+
+        private void AdicionarImagemClick(object sender, RoutedEventArgs e)
+        {
+            new Transparente(null, "Print").Show();
             this.Close();
         }
     }
