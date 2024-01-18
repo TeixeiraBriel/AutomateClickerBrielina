@@ -1,0 +1,29 @@
+﻿<Window x:Class="AutomateClickerBrielina.Controls.SalvarPrint"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AutomateClickerBrielina.Controls"
+        mc:Ignorable="d"
+        Title="SalvarPrint" Height="450" Width="800"
+        WindowStyle="ToolWindow">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="10">
+            <TextBlock Text="Nome Arquivo:"/>
+            <TextBox x:Name="inputName" Width="450" Margin="5,0,5,0"/>
+            <Button Content="Salvar"  Width="100" Height="20" Click="Salvar"/>
+            <Button Content="Cancelar"  Width="100" Height="20" Click="FecharJanela" Margin="5,0,5,0"/>
+        </StackPanel>
+
+        <Image x:Name="imagePanel" Source="../Prints/lastPrint.png" Grid.Row="3" MaxHeight="300" MaxWidth="750" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <!--<Image x:Name="imagePanel" Source="../Prints/lastPrint.png" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
+    </Grid>
+</Window>

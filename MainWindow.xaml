@@ -1,0 +1,105 @@
+﻿<Window x:Class="AutomateClickerBrielina.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AutomateClickerBrielina"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="150"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="15"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="25"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
+            <Label Content="Menu" HorizontalAlignment="Center"/>
+            <Button Content="Iniciar" Width="100" Margin="2" Click="btnInciarClick"/>
+            <Button Content="Gerenciar" Width="100" Margin="2" Click="btnGerenciarClick"/>
+            <Button Content="Posição Mouse" Width="100" Margin="2" Click="btnPosMouseClick" Visibility="Collapsed"/>
+            <Button Content="Nome Janela" Width="100" Margin="2" Click="btnNomeJanelaClick" Visibility="Collapsed"/>
+            <Button Content="Remover Ultimo" Width="100" Margin="2" Click="btnRemoverUltimoClick"/>
+            <Button Content="Loop" Width="100" Margin="2" Click="btnLoopClick"/>
+            <Button Content="Stop" Width="100" Margin="2" Click="btnStopClick"/>
+            <Button Content="Saves" Width="100" Margin="2" Click="btnSavesClick"/>
+            <Button Content="Teste" Width="100" Margin="2" Click="btnTesteClick"/>
+        </StackPanel>
+        
+        <Label x:Name="AvisoLbl" Content="BuscandoJanela" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center" Foreground="Green" Visibility="Hidden"/>
+        <StackPanel 
+            x:Name="AdicionarCliquePanel" 
+            Grid.Row="1" 
+            Grid.Column="2" 
+            Grid.ColumnSpan="2" 
+            Visibility="Visible"
+            Background="LightGray"
+            Margin="5">
+
+            <StackPanel Margin="5">
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Label x:Name="PosXlbl" Content="PosX: "/>
+                    <Label x:Name="PosYlbl" Content="PosY: "/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Cliques:"/>
+                        <TextBox x:Name="CliqueQtdInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Intervalo:"/>
+                        <TextBox x:Name="CliquesintervaloInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Pre Intervalo:"/>
+                    <TextBox x:Name="PreIntervaloInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Pos Intervalo:"/>
+                    <TextBox x:Name="PosIntervaloInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" x:Name="AdicionarCliqueBtnsPanel">
+                    <Button Content="Selecionar" Click="SelecionarCliqueClick" Width="100" Margin="0,5,5,0"/>
+                    <Button Content="Adicionar" Click="AdicionarCliqueClick" Width="100" Margin="0,5,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <Rectangle Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Grid.RowSpan="2" Fill="Black"/>
+        <ScrollViewer Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0,0,0,0" x:Name="ScrollConsole">
+            <StackPanel x:Name="Console"/>
+        </ScrollViewer>
+
+        <Rectangle Visibility="Hidden" x:Name="SavesModalFundo" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="3" Fill="White"/>
+        <StackPanel Visibility="Hidden" x:Name="SavesModal" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="3">
+            <Button Content="Sair" HorizontalAlignment="Right" Click="btnModalFecharSaves"/>
+            <Label Content="Saves" FontWeight="Bold" FontSize="50" HorizontalAlignment="Center"/>
+            <ScrollViewer Height="327">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="5">
+                        <TextBox Text="" Width="150" VerticalAlignment="Center" x:Name="NovoSaveInputName"/>
+                        <Label Content="0 Cliques" x:Name="QtdCliquesInputName"/>
+                        <Button Click="btnModalSalvarClick" Content="Salvar"/>
+                    </StackPanel>
+                    <StackPanel  x:Name="ViewerSaves">
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </StackPanel>
+    </Grid>
+</Window>
