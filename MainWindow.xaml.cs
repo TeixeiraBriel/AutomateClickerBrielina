@@ -60,37 +60,70 @@ namespace AutomateClickerBrielina
 
             taskExecute = Task.Run(() =>
             {
+                imprimeConsole($"--CTRL + ENTER para Parar--");
                 try
                 {
                     do
                     {
-                        imprimeConsole($"--CTRL + ENTER para Parar--");
                         if (loop)
                         {
-                            imprimeConsole($"Pausa de segurança 15s");
-                            Esperar(15);
+                            int tempoSeguranca = 5;
+                            imprimeConsole($"Pausa de segurança {tempoSeguranca}s");
+                            Esperar(tempoSeguranca);
                         }
 
                         foreach (var clique in Cliques)
                         {
-                            if (clique.PreSleep > 0)
+                            if (clique.Imagem)
                             {
-                                imprimeConsole($"Aguardando {(clique.PreSleep)}s");
-                                Esperar(clique.PreSleep);
-                            }
+                                bool sucesso = false;
+                                for (int i = 1; i < 10; i++)
+                                {
+                                    (bool Existe, int X, int Y) saida = CapturaTelas.ValidaMoveImagem(clique.FileName);
+                                    if (saida.Existe)
+                                    {
+                                        clique.posX = saida.X;
+                                        clique.posY = saida.Y;
+                                        sucesso = true;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        Thread.Sleep(1000);
+                                    }
+                                }
 
-                            for (int i = 0; i < clique.qtdCliques; i++)
-                            {
-                                clickTaskValida(clique.posX, clique.posY, !token.IsCancellationRequested);
-                                imprimeConsole($"Clique X:{clique.posX} Y:{clique.posY}");
-                                imprimeConsole($"Aguardando {(clique.TempoIntervalo)}s");
-                                Esperar(clique.TempoIntervalo);
+                                if (sucesso)
+                                {
+                                    AutoItX.MouseMove(clique.posX, clique.posY);
+                                    AutoItX.MouseClick();
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Imagem não encontrada!");
+                                }
                             }
-
-                            if (clique.PosSleep > 0)
+                            else
                             {
-                                imprimeConsole($"Aguardando {(clique.PosSleep)}s");
-                                Esperar(clique.PosSleep);
+                                if (clique.PreSleep > 0)
+                                {
+                                    imprimeConsole($"Aguardando {(clique.PreSleep)}s");
+                                    Esperar(clique.PreSleep);
+                                }
+
+                                for (int i = 0; i < clique.qtdCliques; i++)
+                                {
+                                    clickTaskValida(clique.posX, clique.posY, !token.IsCancellationRequested);
+                                    imprimeConsole($"Clique X:{clique.posX} Y:{clique.posY}");
+                                    imprimeConsole($"Aguardando {(clique.TempoIntervalo)}s");
+                                    Esperar(clique.TempoIntervalo);
+                                }
+
+                                if (clique.PosSleep > 0)
+                                {
+                                    imprimeConsole($"Aguardando {(clique.PosSleep)}s");
+                                    Esperar(clique.PosSleep);
+                                }
                             }
                         }
 
@@ -248,10 +281,10 @@ namespace AutomateClickerBrielina
             (bool Existe, int X, int Y) saida = CapturaTelas.ValidaMoveImagem(teste.LastOrDefault());
             if (saida.Existe)
             {
-                AutoItX.MouseMove(saida.X,saida.Y);
+                AutoItX.MouseMove(saida.X, saida.Y);
                 AutoItX.MouseClick("Left");
                 AutoItX.MouseClick("Left");
-                imprimeConsole( $"Print encontrado " +
+                imprimeConsole($"Print encontrado " +
                                 $"\nclique realizado em X:{saida.X} Y:{saida.Y}");
             }
             else

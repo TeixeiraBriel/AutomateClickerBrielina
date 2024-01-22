@@ -48,6 +48,34 @@ namespace AutomateClickerBrielina.Util
             return screenCapture;
         }
 
+        public static Bitmap CapturaSelecaoFromImage(Bitmap image, int left, int top, int width, int height)
+        {
+            left -= 6; top -= 6; width += 1; height += 1;
+            if (width < 0)
+            {
+                left += width;
+                width *= -1;
+            }
+            if (height < 0)
+            {
+                top += height;
+                height *= -1;
+            }
+
+            Bitmap croppedBitmap = new Bitmap(width, height);
+
+            Rectangle cropRectangle = new Rectangle(left, top, width, height);
+
+            using (Graphics g = Graphics.FromImage(croppedBitmap))
+            {
+                g.DrawImage(image, new Rectangle(0, 0, croppedBitmap.Width, croppedBitmap.Height),
+                            cropRectangle,
+                            GraphicsUnit.Pixel);
+            }
+
+            return croppedBitmap;
+        }
+
         public static List<string> ListaNomesPrints()
         {
             string caminhoDaPasta = @"Prints/";

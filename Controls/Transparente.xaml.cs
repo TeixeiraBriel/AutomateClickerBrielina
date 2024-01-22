@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +17,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 
 namespace AutomateClickerBrielina.Controls
@@ -24,24 +27,31 @@ namespace AutomateClickerBrielina.Controls
     /// </summary>
     public partial class Transparente : Window
     {
-        private AdicionarCliquePosicional JanelaPai;
+        private AdicionarCliquePosicional JanelaPaiPosicional;
+        private GerenciaFluxo JanelaPaiPrint;
         private bool isDragging = false;
         private System.Windows.Point startPoint;
+        private Bitmap PrintTela;
 
-        public Transparente(AdicionarCliquePosicional _janelaPai, string Funcionalidade)
+        public Transparente(Window _janelaPai, string Funcionalidade)
         {
             InitializeComponent();
-            JanelaPai = _janelaPai;
 
             inicializaTela();
             switch (Funcionalidade)
             {
                 case "Clique":
                     this.MouseLeftButtonDown += MainWindow_MouseLeftButtonDown;
+                    Opacity = 0.1;
+                    imagePanel.Source = null;
+                    JanelaPaiPosicional = _janelaPai as AdicionarCliquePosicional;
                     break;
                 case "Print":
+                    _janelaPai.WindowState = WindowState.Minimized;
                     this.MouseLeftButtonDown += OnMouseLeftButtonDown;
                     this.MouseLeftButtonUp += OnMouseLeftButtonUp;
+                    inicializaTelaPrint();
+                    JanelaPaiPrint = _janelaPai as GerenciaFluxo;
                     break;
             }
         }
@@ -50,8 +60,16 @@ namespace AutomateClickerBrielina.Controls
         {
             WindowState = WindowState.Maximized;
             WindowStyle = WindowStyle.None;
-
             Topmost = true;
+        }
+
+        void inicializaTelaPrint()
+        {
+            Bitmap bitmap = CapturaTelas.CapturaSelecao(6, 6, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+            PrintTela = bitmap;
+            BitmapImage bitmapImage = ConvertBitmapToBitmapImage(bitmap);
+            imagePanel.Source = bitmapImage;
+            Opacity = 1;
         }
 
         private void MainWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -60,21 +78,21 @@ namespace AutomateClickerBrielina.Controls
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 var valor = AutoIt.AutoItX.MouseGetPos();
-                JanelaPai.PosXVal = valor.X;
-                JanelaPai.PosYVal = valor.Y;
-                if (!JanelaPai.SelecionarClique)
+                JanelaPaiPosicional.PosXVal = valor.X;
+                JanelaPaiPosicional.PosYVal = valor.Y;
+                if (!JanelaPaiPosicional.SelecionarClique)
                 {
                     System.Windows.MessageBox.Show($"Mouse pos: {valor}");
                 }
                 else
                 {
-                    JanelaPai.PosXlbl.Content = $"PosX: {valor.X}";
-                    JanelaPai.PosYlbl.Content = $"PosY: {valor.Y}";
-                    JanelaPai.CliqueQtdInput.Text = "1";
-                    JanelaPai.CliquesintervaloInput.Text = "0";
-                    JanelaPai.PreIntervaloInput.Text = "0";
-                    JanelaPai.PosIntervaloInput.Text = "0";
-                    JanelaPai.AdicionarCliqueBtnsPanel.IsEnabled = true;
+                    JanelaPaiPosicional.PosXlbl.Content = $"PosX: {valor.X}";
+                    JanelaPaiPosicional.PosYlbl.Content = $"PosY: {valor.Y}";
+                    JanelaPaiPosicional.CliqueQtdInput.Text = "1";
+                    JanelaPaiPosicional.CliquesintervaloInput.Text = "0";
+                    JanelaPaiPosicional.PreIntervaloInput.Text = "0";
+                    JanelaPaiPosicional.PosIntervaloInput.Text = "0";
+                    JanelaPaiPosicional.AdicionarCliqueBtnsPanel.IsEnabled = true;
                 }
                 this.Close();
             }
@@ -107,7 +125,7 @@ namespace AutomateClickerBrielina.Controls
 
                     this.Close();
                     System.Threading.Thread.Sleep(1000);
-                    var print = CapturaTelas.CapturaSelecao(left, top, width, height);
+                    var print = CapturaTelas.CapturaSelecaoFromImage(PrintTela, left, top, width, height);
                     new SalvarPrint(print).Show();
                 }
             }
@@ -115,6 +133,25 @@ namespace AutomateClickerBrielina.Controls
             {
                 System.Windows.MessageBox.Show("Erro ao capturar print; " + ex.Message);
                 this.Close();
+            }
+        }
+
+        static BitmapImage ConvertBitmapToBitmapImage(Bitmap bitmap)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // Save the bitmap to a memory stream in a format that BitmapImage can read
+                bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Bmp);
+                memoryStream.Position = 0;
+
+                // Create a BitmapImage and set its source to the memory stream
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memoryStream;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+
+                return bitmapImage;
             }
         }
     }

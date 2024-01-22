@@ -111,7 +111,7 @@ namespace AutomateClickerBrielina.Controls
 
         private void AdicionarImagemClick(object sender, RoutedEventArgs e)
         {
-            new Transparente(null, "Print").Show();
+            new Transparente(this, "Print").Show();
             this.Close();
         }
     }
