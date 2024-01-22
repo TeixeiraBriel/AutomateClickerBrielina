@@ -32,6 +32,9 @@
                 <Button Content="Teste" Width="100" Margin="2" Click="btnTesteClick"/>
             </StackPanel>
             <Button Content="Stop" Width="100" Margin="2" Click="btnStopClick"/>
+            <Label Name="NumExec"/>
+            <Label Name="NumCliques"/>
+            <Label Name="NumCliquesGeral"/>
         </StackPanel>
 
         <Label x:Name="AvisoLbl" Content="BuscandoJanela" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center" Foreground="Green" Visibility="Hidden"/>

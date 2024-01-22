@@ -61,15 +61,25 @@ namespace AutomateClickerBrielina
             taskExecute = Task.Run(() =>
             {
                 imprimeConsole($"--CTRL + ENTER para Parar--");
+                int numExecCount = 0;
+                int NumCliquesCount = 0;
+                int NumCliquesGeralCount = 0;
+                alteraContadores(numExecCount, NumCliquesCount, NumCliquesGeralCount);
+
                 try
                 {
                     do
                     {
+
                         if (loop)
                         {
                             int tempoSeguranca = 5;
                             imprimeConsole($"Pausa de segurança {tempoSeguranca}s");
                             Esperar(tempoSeguranca);
+
+                            numExecCount++;
+                            NumCliquesCount = 0;
+                            alteraContadores(numExecCount, NumCliquesCount, NumCliquesGeralCount);
                         }
 
                         foreach (var clique in Cliques)
@@ -97,6 +107,10 @@ namespace AutomateClickerBrielina
                                 {
                                     AutoItX.MouseMove(clique.posX, clique.posY);
                                     AutoItX.MouseClick();
+
+                                    NumCliquesCount++;
+                                    NumCliquesGeralCount++;
+                                    alteraContadores(numExecCount, NumCliquesCount, NumCliquesGeralCount);
                                 }
                                 else
                                 {
@@ -114,6 +128,12 @@ namespace AutomateClickerBrielina
                                 for (int i = 0; i < clique.qtdCliques; i++)
                                 {
                                     clickTaskValida(clique.posX, clique.posY, !token.IsCancellationRequested);
+
+                                    NumCliquesCount++;
+                                    NumCliquesGeralCount++;
+
+                                    alteraContadores(numExecCount, NumCliquesCount, NumCliquesGeralCount);
+
                                     imprimeConsole($"Clique X:{clique.posX} Y:{clique.posY}");
                                     imprimeConsole($"Aguardando {(clique.TempoIntervalo)}s");
                                     Esperar(clique.TempoIntervalo);
@@ -173,6 +193,16 @@ namespace AutomateClickerBrielina
                 Console.Children.Add(new Label() { Content = message, Foreground = new SolidColorBrush(Colors.White) });
                 Util.Timer.Para();
                 ScrollConsole.ScrollToEnd();
+            }));
+        }
+
+        public async void alteraContadores(int Exec, int Clique, int CliqueGeral)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                NumCliquesGeral.Content = $"Cliques Geral: {Exec}";
+                NumCliques.Content = $"Cliques: {Clique}";
+                NumExec.Content = $"Loops: {CliqueGeral}";
             }));
         }
 
