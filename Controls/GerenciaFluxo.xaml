@@ -7,14 +7,26 @@
         mc:Ignorable="d"
         Title="GerenciaFluxo" Height="450" Width="800">
     <Grid>
-        <StackPanel Margin="10">
-            <StackPanel Height="30" Width="770" Margin="5" Background="LightGray" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Descrição:" Margin="15,5,5,5"/>
-                <TextBox x:Name="inputDesc" Width="300" Margin="5"/>
-                <Button Content="Adicionar Posicional" Margin="5" Click="AdicionarPosicionalClick"/>
-                <Button Content="Adicionar Imagem" Margin="5" Click="AdicionarImagemClick"/>
-            </StackPanel>
-            <StackPanel x:Name="PainelFluxo"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Height="30" Width="770" Margin="5" Background="LightGray" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1">
+            <TextBlock Text="Descrição:" Margin="15,5,5,5"/>
+            <TextBox x:Name="inputDesc" Width="300" Margin="5"/>
+            <Button Content="Adicionar Posicional" Margin="5" Click="AdicionarPosicionalClick"/>
+            <Button Content="Adicionar Imagem" Margin="5" Click="AdicionarImagemClick"/>
         </StackPanel>
+        <ScrollViewer Grid.Row="2" Grid.Column="1">
+            <StackPanel x:Name="PainelFluxo"/>
+        </ScrollViewer>
     </Grid>
 </Window>

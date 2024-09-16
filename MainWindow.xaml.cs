@@ -84,11 +84,27 @@ namespace AutomateClickerBrielina
 
                         foreach (var clique in Cliques)
                         {
+                            if (token.IsCancellationRequested)
+                                break;
+
                             if (clique.Imagem)
                             {
                                 bool sucesso = false;
+                                Thread.Sleep(150);
+
                                 for (int i = 1; i < 10; i++)
                                 {
+                                    if (token.IsCancellationRequested)
+                                        break;
+
+                                    if (i > 1)
+                                    {
+                                        if (i == 2)
+                                            imprimeConsole($"Buscando: {clique.FileName.Split('\\').Last()}");
+
+                                        imprimeConsole($"Tentativa {i}");
+                                    }
+
                                     (bool Existe, int X, int Y) saida = CapturaTelas.ValidaMoveImagem(clique.FileName);
                                     if (saida.Existe)
                                     {
@@ -108,17 +124,21 @@ namespace AutomateClickerBrielina
                                     AutoItX.MouseMove(clique.posX, clique.posY);
                                     AutoItX.MouseClick();
 
+                                    string nomeArquivo = clique.FileName.Split('\\').Last();
+                                    imprimeConsole($"Clique em {nomeArquivo.Remove(nomeArquivo.Length - 4),4} executado!");
                                     NumCliquesCount++;
                                     NumCliquesGeralCount++;
                                     alteraContadores(numExecCount, NumCliquesCount, NumCliquesGeralCount);
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Imagem não encontrada!");
+                                    imprimeConsole($"Imagem não encontrada!");
+                                    imprimeConsole($"Imagem: {clique.FileName.Split('\\').Last()}");
                                 }
                             }
                             else
                             {
+                                Thread.Sleep(100);
                                 if (clique.PreSleep > 0)
                                 {
                                     imprimeConsole($"Aguardando {(clique.PreSleep)}s");

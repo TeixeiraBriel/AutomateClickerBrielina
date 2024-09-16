@@ -40,7 +40,8 @@ namespace AutomateClickerBrielina.Controls
             foreach (var clique in Cliques)
             {
                 StackPanel painel = new StackPanel() { Orientation = Orientation.Horizontal };
-                painel.Children.Add(new Label() { Content = $"PosX:{clique.posX} PosY:{clique.posY} Qtd:{clique.qtdCliques}" });
+                string texto = clique.Imagem ? clique.FileName.Split('\\').Last() : $"PosX:{clique.posX} PosY:{clique.posY} Qtd:{clique.qtdCliques}";
+                painel.Children.Add(new Label() { Content =  texto});
 
                 Button btnMove = new Button();
                 btnMove.Content = "Move";

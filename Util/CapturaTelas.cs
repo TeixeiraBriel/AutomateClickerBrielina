@@ -124,14 +124,15 @@ namespace AutomateClickerBrielina.Util
 
             if (isInCapture.Existe)
             {
+                sw.Stop();
                 return (true, isInCapture.X + (myPic.Width / 2), isInCapture.Y + (myPic.Height / 2));
             }
             else
             {
+                sw.Stop();
                 return (false, 0, 0);
             }
 
-            sw.Stop();
         }
 
 
