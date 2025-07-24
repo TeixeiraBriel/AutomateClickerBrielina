@@ -49,7 +49,7 @@ namespace AutomateClickerBrielina.Controls
                 {
                     if (clique.Imagem)
                     {
-                        (bool Existe, int X, int Y) saida = CapturaTelas.ValidaMoveImagem(clique.FileName);
+                        (bool Existe, int X, int Y) saida = CapturaTelas.ValidaImagem(clique.FileName);
                         if (saida.Existe)
                         {
                             clique.posX = saida.X;
@@ -73,7 +73,7 @@ namespace AutomateClickerBrielina.Controls
                 {
                     if (clique.Imagem)
                     {
-                        (bool Existe, int X, int Y) saida = CapturaTelas.ValidaMoveImagem(clique.FileName);
+                        (bool Existe, int X, int Y) saida = CapturaTelas.ValidaImagem(clique.FileName);
                         if (saida.Existe)
                         {
                             clique.posX = saida.X;

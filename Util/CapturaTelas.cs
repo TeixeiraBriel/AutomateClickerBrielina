@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Media.Media3D;
 using System.IO;
-using AutoIt;
+using OpenCvSharp;
+
 
 namespace AutomateClickerBrielina.Util
 {
@@ -40,7 +36,7 @@ namespace AutomateClickerBrielina.Util
             g.CopyFromScreen(left,
                              top,
                              0, 0,
-                             new Size(width, height),
+                             new System.Drawing.Size(width, height),
                              CopyPixelOperation.SourceCopy);
 
             sw.Stop();
@@ -103,7 +99,7 @@ namespace AutomateClickerBrielina.Util
             }
         }
 
-        public static (bool Existe, int X, int Y) ValidaMoveImagem(string nomeImagem)
+        public static (bool Existe, int X, int Y) ValidaImagem(string nomeImagem)
         {
             Bitmap myPic = new Bitmap(nomeImagem);
             Stopwatch sw = new Stopwatch();
@@ -119,8 +115,8 @@ namespace AutomateClickerBrielina.Util
                              CopyPixelOperation.SourceCopy);
             screenCapture.Save($"Prints\\ScreenSearchIn.png", ImageFormat.Png);
             myPic.Save($"Prints\\ScreenSearchFor.png", ImageFormat.Png);
-            
-            (bool Existe, int X, int Y) isInCapture = IsInCapture(myPic, screenCapture);
+
+            (bool Existe, int X, int Y) isInCapture = IsInCaptureOpenCv(myPic, screenCapture);
 
             if (isInCapture.Existe)
             {
@@ -135,44 +131,36 @@ namespace AutomateClickerBrielina.Util
 
         }
 
-
-        private static (bool Existe, int X, int Y) IsInCapture(Bitmap searchFor, Bitmap searchIn)
+        public static (bool Exists, int X, int Y) IsInCaptureOpenCv(Bitmap templateBmp, Bitmap sourceBmp, double threshold = 0.80)
         {
-            int width = 0;
-            int height = 0;
-            for (int x = 0; x < searchIn.Width; x++)
+            using (var templateMat = OpenCvSharp.Extensions.BitmapConverter.ToMat(templateBmp))
+            using (var sourceMat = OpenCvSharp.Extensions.BitmapConverter.ToMat(sourceBmp))
             {
-                for (int y = 0; y < searchIn.Height; y++)
+                // Split template and source into channels
+                Mat[] templateChannels = Cv2.Split(templateMat);
+                Mat[] sourceChannels = Cv2.Split(sourceMat);
+
+                var resultChannels = new Mat[3]; // assuming 3 channels (BGR)
+
+                for (int c = 0; c < 3; c++)
                 {
-                    bool invalid = false;
-                    int k = x, l = y;
-                    for (int a = 0; a < searchFor.Width; a++)
-                    {
-                        l = y;
-                        for (int b = 0; b < searchFor.Height; b++)
-                        {
-                            if (searchFor.GetPixel(a, b) != searchIn.GetPixel(k, l))
-                            {
-                                invalid = true;
-                                break;
-                            }
-                            else
-                                l++;
-                        }
-                        if (invalid)
-                            break;
-                        else
-                            k++;
-                    }
-                    if (!invalid)
-                    {
-                        width = x;
-                        height = y;
-                        return (true, width, height);
-                    }
+                    // MatchTemplate for each channel
+                    resultChannels[c] = new Mat();
+                    Cv2.MatchTemplate(sourceChannels[c], templateChannels[c], resultChannels[c], TemplateMatchModes.CCoeffNormed);
                 }
+
+                // Average the results per pixel
+                Mat colorResult = (resultChannels[0] + resultChannels[1] + resultChannels[2]) / 3.0;
+
+                // Find best match in the averaged result
+                Cv2.MinMaxLoc(colorResult, out double minVal, out double maxVal, out OpenCvSharp.Point minLoc, out OpenCvSharp.Point maxLoc);
+
+                if (maxVal >= threshold)
+                    return (true, maxLoc.X, maxLoc.Y);
             }
-            return (false, width, height);
+
+            return (false, 0, 0);
         }
+
     }
 }
