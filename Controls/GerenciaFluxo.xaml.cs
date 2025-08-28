@@ -89,7 +89,7 @@ namespace AutomateClickerBrielina.Controls
                             NavegarCliquesAdionador(new AdicionarCliquePosicional(FuncaoCrudCliqueEnum.Editar, clique));
                             break;
                         case TipoCliqueEnum.Imagem:
-                            NavegarCliquesAdionador(new SalvarPrint(FuncaoCrudCliqueEnum.Editar, clique));
+                            NavegarCliquesAdionador(new SalvarPrint(FuncaoCrudCliqueEnum.Editar, null, clique));
                             break;
                         default:
                             clique.validaTipo();

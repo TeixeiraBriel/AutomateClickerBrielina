@@ -1,4 +1,5 @@
 ﻿using AutomateClickerBrielina.Entidades;
+using AutomateClickerBrielina.Enums;
 using AutomateClickerBrielina.Util;
 using System;
 using System.Collections.Generic;
@@ -33,10 +34,12 @@ namespace AutomateClickerBrielina.Controls
         private System.Windows.Point startPoint;
         private Bitmap PrintTela;
         private Clique _oldClique = null;
+        FuncaoCrudCliqueEnum _funcaoCrudCliqueEnum;
 
-        public Transparente(string Funcionalidade, Page _janelaPai = null, Clique oldClique = null)
+        public Transparente(FuncaoCrudCliqueEnum funcaoCrudCliqueEnum ,TipoCliqueEnum Funcionalidade, Page _janelaPai = null, Clique oldClique = null)
         {
             InitializeComponent();
+            _funcaoCrudCliqueEnum = funcaoCrudCliqueEnum;
 
             if (oldClique != null)
                 _oldClique = oldClique;
@@ -44,13 +47,13 @@ namespace AutomateClickerBrielina.Controls
             inicializaTela();
             switch (Funcionalidade)
             {
-                case "Clique":
+                case TipoCliqueEnum.Posicional:
                     this.MouseLeftButtonDown += MainWindow_MouseLeftButtonDown;
                     Opacity = 0.1;
                     imagePanel.Source = null;
                     JanelaPaiPosicional = _janelaPai as AdicionarCliquePosicional;
                     break;
-                case "Print":
+                case TipoCliqueEnum.Imagem:
                     this.MouseLeftButtonDown += OnMouseLeftButtonDown;
                     this.MouseLeftButtonUp += OnMouseLeftButtonUp;
                     inicializaTelaPrint();
@@ -128,7 +131,7 @@ namespace AutomateClickerBrielina.Controls
                     //System.Threading.Thread.Sleep(1000);
                     var print = CapturaTelas.CapturaSelecaoFromImage(PrintTela, left, top, width, height);
                     CliquesAdionador cliquesAdionador = new CliquesAdionador();
-                    cliquesAdionador.JanelaCliquesAdionador.Navigate(new SalvarPrint(print));
+                    cliquesAdionador.JanelaCliquesAdionador.Navigate(new SalvarPrint(_funcaoCrudCliqueEnum, print, _oldClique));
                     cliquesAdionador.Show();
                 }
             }

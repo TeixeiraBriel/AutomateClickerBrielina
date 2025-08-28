@@ -17,20 +17,20 @@
 
         <StackPanel Orientation="Vertical" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10">
             <StackPanel>
-                <TextBlock Text="Nome Arquivo:"/>
+                <TextBlock Text="Salvar Print Como:"/>
                 <TextBox x:Name="inputName" Width="280"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                <Button Content="Salvar"  Width="90" Height="20" Click="Salvar"/>
-                <Button Content="Carregar"  Width="90" Height="20" Click="Carregar" Margin="5,0,5,0"/>
-                <Button Content="Cancelar"  Width="90" Height="20" Click="FecharJanela" />
+                <Button Content="Novo Print"  Width="90" Height="20" Click="NovoPrint" Margin="5,0,5,0"/>
+                <Button Content="Carregar Print"  Width="90" Height="20" Click="Carregar" Margin="5,0,5,0"/>
+                <Button Content="Voltar"  Width="90" Height="20" Click="FecharJanela" />
             </StackPanel>
         </StackPanel>
 
         <Image x:Name="imagePanel" Source="../Prints/lastPrint.png" Grid.Row="3" MaxHeight="300" MaxWidth="750" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
         <StackPanel  Grid.Row="4" HorizontalAlignment="Right" Margin="0,0,15,0" Orientation="Horizontal">
-            <Button Content="Adicionar Clique"  Width="100" Height="20" Click="AdicionarClique"/>
+            <Button Content="Adicionar" Name="btnConcluir" Width="100" Height="20"/>
         </StackPanel>
     </Grid>
 </Page>

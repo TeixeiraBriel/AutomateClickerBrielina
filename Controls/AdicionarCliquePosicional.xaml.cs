@@ -97,7 +97,7 @@ namespace AutomateClickerBrielina.Controls
         private void SelecionarCliqueClick(object sender, RoutedEventArgs e)
         {
             SelecionarClique = true;
-            Transparente novaJanelaTransparente = new Transparente("Clique", this, _clique);
+            Transparente novaJanelaTransparente = new Transparente(FuncaoCrudCliqueEnum.Adicionar ,TipoCliqueEnum.Posicional, this, _clique);
             novaJanelaTransparente.Show();
             CliqueSelecionado = true;
 
