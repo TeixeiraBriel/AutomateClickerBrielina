@@ -13,6 +13,7 @@ using AutoIt;
 using AutomateClickerBrielina.Entidades;
 using AutomateClickerBrielina.Util;
 using System.Runtime.InteropServices;
+using AutomateClickerBrielina.Servico;
 
 namespace AutomateClickerBrielina
 {
@@ -27,7 +28,7 @@ namespace AutomateClickerBrielina
         Task taskExecute;
         CancellationTokenSource cancellationTokenSource;
 
-        public static List<Clique> Cliques;
+        public static CliquesControlador CliquesControlador;
         public int PosXVal = 0;
         public int PosYVal = 0;
         public bool SelecionarClique = false;
@@ -37,7 +38,7 @@ namespace AutomateClickerBrielina
             InitializeComponent();
             inicializaTimer();
             janelaAtiva = AutoIt.AutoItX.WinGetTitle("[ACTIVE]");
-            Cliques = new List<Clique>();
+            CliquesControlador = new CliquesControlador();
         }
 
         private async void btnInciarClick(object sender, RoutedEventArgs e)
@@ -82,13 +83,14 @@ namespace AutomateClickerBrielina
                             alteraContadores(numExecCount, NumCliquesCount, NumCliquesGeralCount);
                         }
 
-                        foreach (var clique in Cliques)
+                        foreach (var clique in CliquesControlador.Cliques)
                         {
                             if (clique.Imagem)
                             {
                                 bool sucesso = false;
                                 for (int i = 1; i < 10; i++)
                                 {
+                                    imprimeConsole($"Tentativa {i}");
                                     (bool Existe, int X, int Y) saida = CapturaTelas.ValidaMoveImagem(clique.FileName);
                                     if (saida.Existe)
                                     {
@@ -114,7 +116,7 @@ namespace AutomateClickerBrielina
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Imagem não encontrada!");
+                                    imprimeConsole("Imagem não encontrada!");
                                 }
                             }
                             else
@@ -221,7 +223,7 @@ namespace AutomateClickerBrielina
 
         private void btnGerenciarClick(object sender, RoutedEventArgs e)
         {
-            new GerenciaFluxo(Cliques).Show();
+            new GerenciaFluxo().Show();
         }
 
         private void btnStopClick(object sender, RoutedEventArgs e)
@@ -239,7 +241,7 @@ namespace AutomateClickerBrielina
             ViewerSaves.Children.Clear();
             SavesModal.Visibility = Visibility.Visible;
             SavesModalFundo.Visibility = Visibility.Visible;
-            QtdCliquesInputName.Content = $"{Cliques.Count} Cliques";
+            QtdCliquesInputName.Content = $"{CliquesControlador.Cliques.Count} Cliques";
 
             List<Save> Saves = JsonUtil.CarregaJsons();
             foreach (var save in Saves)
@@ -257,7 +259,7 @@ namespace AutomateClickerBrielina
                 Button btnCarregar = new Button() { Content = "Carregar" };
                 btnCarregar.Click += (sd, ev) =>
                 {
-                    Cliques = save.Sequencia;
+                    CliquesControlador.Cliques = save.Sequencia;
                     MessageBox.Show($"Save {save.Nome} carregado.");
                     SavesModal.Visibility = Visibility.Hidden;
                     SavesModalFundo.Visibility = Visibility.Hidden;
@@ -283,10 +285,10 @@ namespace AutomateClickerBrielina
 
         private void btnModalSalvarClick(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(NovoSaveInputName.Text) && Cliques.Count > 0)
+            if (!string.IsNullOrEmpty(NovoSaveInputName.Text) && CliquesControlador.Cliques.Count > 0)
             {
                 List<Save> Saves = JsonUtil.CarregaJsons();
-                Saves.Add(new Save() { Nome = NovoSaveInputName.Text, Sequencia = Cliques });
+                Saves.Add(new Save() { Nome = NovoSaveInputName.Text, Sequencia = CliquesControlador.Cliques });
                 Util.JsonUtil.ModifiarJson(Saves);
                 NovoSaveInputName.Text = "";
 

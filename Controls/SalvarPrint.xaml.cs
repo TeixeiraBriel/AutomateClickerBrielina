@@ -1,4 +1,6 @@
 ﻿using AutomateClickerBrielina.Entidades;
+using AutomateClickerBrielina.Enums;
+using AutomateClickerBrielina.Servico;
 using AutomateClickerBrielina.Util;
 using System;
 using System.CodeDom;
@@ -8,6 +10,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace AutomateClickerBrielina.Controls
@@ -15,24 +18,20 @@ namespace AutomateClickerBrielina.Controls
     /// <summary>
     /// Lógica interna para SalvarPrint.xaml
     /// </summary>
-    public partial class SalvarPrint : Window
+    public partial class SalvarPrint : Page
     {
         private Bitmap Print;
         private string _FileName;
+        private CliquesControlador CliquesControlador;
 
         public SalvarPrint(Bitmap _print)
         {
             InitializeComponent();
             Print = _print;
+            CliquesControlador = MainWindow.CliquesControlador;
 
             InicializaImagem();
             inputName.IsReadOnly = false;
-            Closing += AoFechar;
-        }
-
-        private void AoFechar(object sender, CancelEventArgs e)
-        {
-            new GerenciaFluxo(MainWindow.Cliques).Show();
         }
 
         void InicializaImagem()
@@ -55,11 +54,6 @@ namespace AutomateClickerBrielina.Controls
             {
                 MessageBox.Show($"Erro ao carregar a imagem: {ex.Message}");
             }
-        }
-
-        private void FecharJanela(object sender, RoutedEventArgs e)
-        {
-            this.Close();
         }
 
         private void Salvar(object sender, RoutedEventArgs e)
@@ -118,8 +112,9 @@ namespace AutomateClickerBrielina.Controls
 
         private void AdicionarClique(object sender, RoutedEventArgs e)
         {
-            MainWindow.Cliques.Add(new Clique()
+            CliquesControlador.Add(new Clique()
             {
+                Tipo = TipoCliqueEnum.Posicional,
                 FileName = _FileName,
                 Imagem = true,
                 PosSleep = 0,
@@ -129,7 +124,14 @@ namespace AutomateClickerBrielina.Controls
                 posX = 0,
                 posY = 0
             });
-            this.Close();
+
+            Window.GetWindow(this).Close();
+            new GerenciaFluxo().Show();
+        }
+
+        private void FecharJanela(object sender, RoutedEventArgs e)
+        {
+            Window.GetWindow(this).Close();
         }
     }
 }

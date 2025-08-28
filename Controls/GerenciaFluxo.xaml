@@ -11,8 +11,7 @@
             <StackPanel Height="30" Width="770" Margin="5" Background="LightGray" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock Text="Descrição:" Margin="15,5,5,5"/>
                 <TextBox x:Name="inputDesc" Width="300" Margin="5"/>
-                <Button Content="Adicionar Posicional" Margin="5" Click="AdicionarPosicionalClick"/>
-                <Button Content="Adicionar Imagem" Margin="5" Click="AdicionarImagemClick"/>
+                <Button Content="Adicionar Clique" Margin="5" Click="AdicionarCliqueClick"/>
             </StackPanel>
             <StackPanel x:Name="PainelFluxo"/>
         </StackPanel>

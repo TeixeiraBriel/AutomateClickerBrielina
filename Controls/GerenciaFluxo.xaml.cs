@@ -1,19 +1,8 @@
-﻿using AutomateClickerBrielina.Entidades;
+﻿using AutomateClickerBrielina.Enums;
+using AutomateClickerBrielina.Servico;
 using AutomateClickerBrielina.Util;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace AutomateClickerBrielina.Controls
 {
@@ -22,14 +11,14 @@ namespace AutomateClickerBrielina.Controls
     /// </summary>
     public partial class GerenciaFluxo : Window
     {
-        List<Clique> Cliques;
+        CliquesControlador CliquesControlador;
         bool Navegando;
 
-        public GerenciaFluxo(List<Clique> cliques)
+        public GerenciaFluxo()
         {
             InitializeComponent();
 
-            Cliques = cliques;
+            CliquesControlador = MainWindow.CliquesControlador;
             inicializaDetalhesFluxo();
             Navegando = false;
         }
@@ -37,7 +26,7 @@ namespace AutomateClickerBrielina.Controls
         void inicializaDetalhesFluxo()
         {
             PainelFluxo.Children.Clear();
-            foreach (var clique in Cliques)
+            foreach (var clique in CliquesControlador.Cliques)
             {
                 StackPanel painel = new StackPanel() { Orientation = Orientation.Horizontal };
                 painel.Children.Add(new Label() { Content = $"PosX:{clique.posX} PosY:{clique.posY} Qtd:{clique.qtdCliques}" });
@@ -90,28 +79,64 @@ namespace AutomateClickerBrielina.Controls
                 };
                 painel.Children.Add(btnRun);
 
+                Button btnEditar = new Button();
+                btnEditar.Content = "Editar";
+                btnEditar.Click += (s, e) =>
+                {
+                    switch (clique.Tipo)
+                    {
+                        case TipoCliqueEnum.Posicional:
+                            NavegarCliquesAdionador(new AdicionarCliquePosicional(FuncaoCrudCliqueEnum.Editar, clique));
+                            break;
+                        case TipoCliqueEnum.Imagem:
+                            break;
+                        default:
+                            clique.validaTipo();
+                            MessageBox.Show("Tipo ainda não definido, tentar novamente!");
+                            break;
+                    }
+                };
+                painel.Children.Add(btnEditar);
+
                 Button btnExcluir = new Button();
                 btnExcluir.Content = "Excluir";
                 btnExcluir.Click += (s, e) =>
                 {
-                    Cliques.Remove(clique);
+                    CliquesControlador.Remove(clique);
                     inicializaDetalhesFluxo();
                 };
                 painel.Children.Add(btnExcluir);
+
+                Button btnAdicionarCliqueAcima = new Button();
+                btnAdicionarCliqueAcima.Content = "Adicionar Clique Acima";
+                btnAdicionarCliqueAcima.Click += (s, e) =>
+                {
+                    NavegarCliquesAdionador(new AdicionarCliqueOpcoes(FuncaoCrudCliqueEnum.Up, clique));
+                };
+                painel.Children.Add(btnAdicionarCliqueAcima);
+
+                Button btnAdicionarCliqueAbaixo = new Button();
+                btnAdicionarCliqueAbaixo.Content = "Adicionar Clique Abaixo";
+                btnAdicionarCliqueAbaixo.Click += (s, e) =>
+                {
+                    NavegarCliquesAdionador(new AdicionarCliqueOpcoes(FuncaoCrudCliqueEnum.Down, clique));
+                };
+                painel.Children.Add(btnAdicionarCliqueAbaixo);
 
                 PainelFluxo.Children.Add(painel);
             }
         }
 
-        private void AdicionarPosicionalClick(object sender, RoutedEventArgs e)
+        private void AdicionarCliqueClick(object sender, RoutedEventArgs e)
         {
-            new AdicionarCliquePosicional(Cliques).Show();
-            this.Close();
+            NavegarCliquesAdionador(new AdicionarCliqueOpcoes(FuncaoCrudCliqueEnum.Adicionar));
         }
 
-        private void AdicionarImagemClick(object sender, RoutedEventArgs e)
+        void NavegarCliquesAdionador(Page page)
         {
-            new Transparente(this, "Print").Show();
+            CliquesAdionador cliquesAdionador = new CliquesAdionador();
+            cliquesAdionador.JanelaCliquesAdionador.Navigate(page);
+            cliquesAdionador.Show();
             this.Close();
         }
     }

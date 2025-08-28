@@ -1,4 +1,4 @@
-﻿<Window x:Class="AutomateClickerBrielina.Controls.AdicionarCliquePosicional"
+﻿<Page x:Class="AutomateClickerBrielina.Controls.AdicionarCliquePosicional"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,44 +7,37 @@
         mc:Ignorable="d"
         Title="AdicionarCliquePosicional" Height="222" Width="302">
     <Grid>
-        <StackPanel 
-            x:Name="AdicionarCliquePanel" 
-            Visibility="Visible"
-            Background="LightGray"
-            Margin="5">
+        <StackPanel Margin="5">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label x:Name="PosXlbl" Content="PosX: "/>
+                <Label x:Name="PosYlbl" Content="PosY: "/>
+            </StackPanel>
 
-            <StackPanel Margin="5">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Label x:Name="PosXlbl" Content="PosX: "/>
-                    <Label x:Name="PosYlbl" Content="PosY: "/>
-                </StackPanel>
-
+            <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Horizontal">
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Cliques:"/>
-                        <TextBox x:Name="CliqueQtdInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Intervalo:"/>
-                        <TextBox x:Name="CliquesintervaloInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </StackPanel>
+                    <Label Content="Cliques:"/>
+                    <TextBox x:Name="CliqueQtdInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </StackPanel>
-
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Pre Intervalo:"/>
-                    <TextBox x:Name="PreIntervaloInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Label Content="Intervalo:"/>
+                    <TextBox x:Name="CliquesintervaloInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </StackPanel>
+            </StackPanel>
 
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Pos Intervalo:"/>
-                    <TextBox x:Name="PosIntervaloInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Pre Intervalo:"/>
+                <TextBox x:Name="PreIntervaloInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" x:Name="AdicionarCliqueBtnsPanel">
-                    <Button Content="Selecionar" Click="SelecionarCliqueClick" Width="100" Margin="0,5,5,0"/>
-                    <Button Content="Adicionar" Click="AdicionarCliqueClick" Width="100" Margin="0,5,0,0"/>
-                </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Pos Intervalo:"/>
+                <TextBox x:Name="PosIntervaloInput" PreviewTextInput="NumerosTextBox_PreviewTextInput" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" x:Name="AdicionarCliqueBtnsPanel">
+                <Button Content="Selecionar" Click="SelecionarCliqueClick" Width="100" Margin="0,5,5,0"/>
+                <Button Content="Adicionar" Name="btnConcluir" Width="100" Margin="0,5,0,0"/>
             </StackPanel>
         </StackPanel>
     </Grid>
-</Window>
+</Page>

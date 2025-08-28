@@ -1,4 +1,5 @@
-﻿using AutomateClickerBrielina.Util;
+﻿using AutomateClickerBrielina.Entidades;
+using AutomateClickerBrielina.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,14 +29,17 @@ namespace AutomateClickerBrielina.Controls
     public partial class Transparente : Window
     {
         private AdicionarCliquePosicional JanelaPaiPosicional;
-        private GerenciaFluxo JanelaPaiPrint;
         private bool isDragging = false;
         private System.Windows.Point startPoint;
         private Bitmap PrintTela;
+        private Clique _oldClique = null;
 
-        public Transparente(Window _janelaPai, string Funcionalidade)
+        public Transparente(string Funcionalidade, Page _janelaPai = null, Clique oldClique = null)
         {
             InitializeComponent();
+
+            if (oldClique != null)
+                _oldClique = oldClique;
 
             inicializaTela();
             switch (Funcionalidade)
@@ -47,11 +51,9 @@ namespace AutomateClickerBrielina.Controls
                     JanelaPaiPosicional = _janelaPai as AdicionarCliquePosicional;
                     break;
                 case "Print":
-                    _janelaPai.WindowState = WindowState.Minimized;
                     this.MouseLeftButtonDown += OnMouseLeftButtonDown;
                     this.MouseLeftButtonUp += OnMouseLeftButtonUp;
                     inicializaTelaPrint();
-                    JanelaPaiPrint = _janelaPai as GerenciaFluxo;
                     break;
             }
         }
@@ -78,22 +80,21 @@ namespace AutomateClickerBrielina.Controls
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 var valor = AutoIt.AutoItX.MouseGetPos();
-                JanelaPaiPosicional.PosXVal = valor.X;
-                JanelaPaiPosicional.PosYVal = valor.Y;
-                if (!JanelaPaiPosicional.SelecionarClique)
+                
+                if (_oldClique == null)
                 {
-                    System.Windows.MessageBox.Show($"Mouse pos: {valor}");
+                    Clique newClique = new Clique() { posX = valor.X, posY = valor.Y };
+                    JanelaPaiPosicional._clique = newClique;
                 }
                 else
                 {
-                    JanelaPaiPosicional.PosXlbl.Content = $"PosX: {valor.X}";
-                    JanelaPaiPosicional.PosYlbl.Content = $"PosY: {valor.Y}";
-                    JanelaPaiPosicional.CliqueQtdInput.Text = "1";
-                    JanelaPaiPosicional.CliquesintervaloInput.Text = "0";
-                    JanelaPaiPosicional.PreIntervaloInput.Text = "0";
-                    JanelaPaiPosicional.PosIntervaloInput.Text = "0";
-                    JanelaPaiPosicional.AdicionarCliqueBtnsPanel.IsEnabled = true;
+                    _oldClique.posX = valor.X;
+                    _oldClique.posY = valor.Y;
+                    JanelaPaiPosicional._clique = _oldClique;
                 }
+
+                JanelaPaiPosicional.preencheCamposDados();
+                JanelaPaiPosicional.AdicionarCliqueBtnsPanel.IsEnabled = true;
                 this.Close();
             }
         }
@@ -124,9 +125,11 @@ namespace AutomateClickerBrielina.Controls
                     int height = int.Parse((finalPoint.Y - startPoint.Y).ToString());
 
                     this.Close();
-                    System.Threading.Thread.Sleep(1000);
+                    //System.Threading.Thread.Sleep(1000);
                     var print = CapturaTelas.CapturaSelecaoFromImage(PrintTela, left, top, width, height);
-                    new SalvarPrint(print).Show();
+                    CliquesAdionador cliquesAdionador = new CliquesAdionador();
+                    cliquesAdionador.JanelaCliquesAdionador.Navigate(new SalvarPrint(print));
+                    cliquesAdionador.Show();
                 }
             }
             catch (Exception ex)

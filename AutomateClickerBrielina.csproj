@@ -68,6 +68,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\AdicionarCliqueOpcoes.xaml.cs">
+      <DependentUpon>AdicionarCliqueOpcoes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CliquesAdionador.xaml.cs">
+      <DependentUpon>CliquesAdionador.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Enums\FuncaoCrudCliqueEnum.cs" />
+    <Compile Include="Enums\TipoCliqueEnum.cs" />
+    <Compile Include="Servico\CliquesControlador.cs" />
     <Compile Include="Controls\AdicionarCliquePosicional.xaml.cs">
       <DependentUpon>AdicionarCliquePosicional.xaml</DependentUpon>
     </Compile>
@@ -86,7 +95,15 @@
     <Compile Include="Util\CapturaTelas.cs" />
     <Compile Include="Util\JsonUtil.cs" />
     <Compile Include="Util\Timer.cs" />
+    <Page Include="Controls\AdicionarCliqueOpcoes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\AdicionarCliquePosicional.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CliquesAdionador.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
