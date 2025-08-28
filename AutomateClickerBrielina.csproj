@@ -92,6 +92,7 @@
     <Compile Include="Entidades\Fluxo.cs" />
     <Compile Include="Entidades\Laco.cs" />
     <Compile Include="Entidades\Save.cs" />
+    <Compile Include="Servico\ExecucaoCliques.cs" />
     <Compile Include="Util\CapturaTelas.cs" />
     <Compile Include="Util\JsonUtil.cs" />
     <Compile Include="Util\Timer.cs" />

@@ -114,7 +114,7 @@ namespace AutomateClickerBrielina.Controls
         {
             CliquesControlador.Add(new Clique()
             {
-                Tipo = TipoCliqueEnum.Posicional,
+                Tipo = TipoCliqueEnum.Imagem,
                 FileName = _FileName,
                 Imagem = true,
                 PosSleep = 0,

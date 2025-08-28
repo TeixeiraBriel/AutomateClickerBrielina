@@ -21,6 +21,7 @@ namespace AutomateClickerBrielina.Entidades
         public int TempoIntervalo { get; set; }
         public string FileName { get; set; }
         public bool Imagem { get; set; }
+        public bool Sucesso { get; set; } = true;
 
         public TipoCliqueEnum validaTipo()
         {

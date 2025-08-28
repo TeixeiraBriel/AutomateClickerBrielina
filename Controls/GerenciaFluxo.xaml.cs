@@ -29,7 +29,7 @@ namespace AutomateClickerBrielina.Controls
             foreach (var clique in CliquesControlador.Cliques)
             {
                 StackPanel painel = new StackPanel() { Orientation = Orientation.Horizontal };
-                painel.Children.Add(new Label() { Content = $"PosX:{clique.posX} PosY:{clique.posY} Qtd:{clique.qtdCliques}" });
+                painel.Children.Add(new Label() { Content = $"{clique.Tipo}: PosX:{clique.posX} PosY:{clique.posY} Qtd:{clique.qtdCliques}" });
 
                 Button btnMove = new Button();
                 btnMove.Content = "Move";
@@ -89,6 +89,7 @@ namespace AutomateClickerBrielina.Controls
                             NavegarCliquesAdionador(new AdicionarCliquePosicional(FuncaoCrudCliqueEnum.Editar, clique));
                             break;
                         case TipoCliqueEnum.Imagem:
+                            NavegarCliquesAdionador(new SalvarPrint(FuncaoCrudCliqueEnum.Editar, clique));
                             break;
                         default:
                             clique.validaTipo();
