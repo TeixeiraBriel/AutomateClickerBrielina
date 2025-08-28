@@ -1,33 +1,36 @@
-﻿<Window x:Class="AutomateClickerBrielina.Controls.SalvarPrint"
+﻿<Page x:Class="AutomateClickerBrielina.Controls.SalvarPrint"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AutomateClickerBrielina.Controls"
         mc:Ignorable="d"
-        Title="SalvarPrint" Height="450" Width="800"
-        WindowStyle="ToolWindow">
+        Title="SalvarPrint" Height="222" Width="302">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="15"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="15"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="10">
-            <TextBlock Text="Nome Arquivo:"/>
-            <TextBox x:Name="inputName" Width="350" Margin="5,0,5,0"/>
-            <Button Content="Salvar"  Width="100" Height="20" Click="Salvar"/>
-            <Button Content="Carregar"  Width="100" Height="20" Click="Carregar" Margin="5,0,5,0"/>
-            <Button Content="Cancelar"  Width="100" Height="20" Click="FecharJanela" />
+        <StackPanel Orientation="Vertical" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10">
+            <StackPanel>
+                <TextBlock Text="Salvar Print Como:"/>
+                <TextBox x:Name="inputName" Width="280"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Button Content="Novo Print"  Width="90" Height="20" Click="NovoPrint" Margin="5,0,5,0"/>
+                <Button Content="Carregar Print"  Width="90" Height="20" Click="Carregar" Margin="5,0,5,0"/>
+                <Button Content="Voltar"  Width="90" Height="20" Click="FecharJanela" />
+            </StackPanel>
         </StackPanel>
 
         <Image x:Name="imagePanel" Source="../Prints/lastPrint.png" Grid.Row="3" MaxHeight="300" MaxWidth="750" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
         <StackPanel  Grid.Row="4" HorizontalAlignment="Right" Margin="0,0,15,0" Orientation="Horizontal">
-            <Button Content="Adicionar Clique"  Width="100" Height="20" Click="AdicionarClique"/>
+            <Button Content="Adicionar" Name="btnConcluir" Width="100" Height="20"/>
         </StackPanel>
     </Grid>
-</Window>
+</Page>

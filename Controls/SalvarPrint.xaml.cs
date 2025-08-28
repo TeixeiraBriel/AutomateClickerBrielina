@@ -1,4 +1,6 @@
 ﻿using AutomateClickerBrielina.Entidades;
+using AutomateClickerBrielina.Enums;
+using AutomateClickerBrielina.Servico;
 using AutomateClickerBrielina.Util;
 using System;
 using System.CodeDom;
@@ -8,47 +10,53 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-
 namespace AutomateClickerBrielina.Controls
 {
     /// <summary>
     /// Lógica interna para SalvarPrint.xaml
     /// </summary>
-    public partial class SalvarPrint : Window
+    public partial class SalvarPrint : Page
     {
         private Bitmap Print;
         private string _FileName;
-
-        public SalvarPrint(Bitmap _print)
+        private CliquesControlador CliquesControlador;
+        FuncaoCrudCliqueEnum _funcaoCrudCliqueEnum;
+        Clique _clique;
+        public SalvarPrint(FuncaoCrudCliqueEnum funcaoCrudCliqueEnum, Bitmap _print, Clique clique = null)
         {
             InitializeComponent();
+            _funcaoCrudCliqueEnum = funcaoCrudCliqueEnum;
+            _clique = clique;
             Print = _print;
-
+            CliquesControlador = MainWindow.CliquesControlador;
             InicializaImagem();
             inputName.IsReadOnly = false;
-            Closing += AoFechar;
         }
-
-        private void AoFechar(object sender, CancelEventArgs e)
-        {
-            new GerenciaFluxo(MainWindow.Cliques).Show();
-        }
-
         void InicializaImagem()
         {
             try
             {
+                if (_funcaoCrudCliqueEnum == FuncaoCrudCliqueEnum.Adicionar)
+                {
+                    btnConcluir.Click += (s, e) => AdicionarClique(s, e);
+                }
+                else if (_funcaoCrudCliqueEnum == FuncaoCrudCliqueEnum.Editar)
+                {
+                    btnConcluir.Click += (s, e) => EditarClique(s, e);
+                    btnConcluir.Content = "Editar";
+                    string diretorioInicial = Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
+                    // O caminho do arquivo selecionado está em openFileDialog.FileName
+                    string caminhoDoArquivo = diretorioInicial + _clique.FileName;
+                    imagePanel.Source = buscarImage(caminhoDoArquivo);
+                    inputName.Text = _clique.FileName.Split('\\').LastOrDefault().Split('.').FirstOrDefault();
+                    inputName.IsReadOnly = true;
+                    _FileName = caminhoDoArquivo;
+                }
                 if (Print == null)
                     return;
-
-                IntPtr hBitmap = Print.GetHbitmap();
-                BitmapSource bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                    hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-
-                // Libera o recurso do HBitmap para evitar vazamento de memória
-                DeleteObject(hBitmap);
-
+                BitmapSource bitmapSource = GeraBitmapSource();
                 imagePanel.Source = bitmapSource;
             }
             catch (Exception ex)
@@ -56,41 +64,43 @@ namespace AutomateClickerBrielina.Controls
                 MessageBox.Show($"Erro ao carregar a imagem: {ex.Message}");
             }
         }
-
-        private void FecharJanela(object sender, RoutedEventArgs e)
+        BitmapSource GeraBitmapSource()
         {
-            this.Close();
+            IntPtr hBitmap = Print.GetHbitmap();
+            BitmapSource bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            // Libera o recurso do HBitmap para evitar vazamento de memória
+            DeleteObject(hBitmap);
+            return bitmapSource;
         }
-
-        private void Salvar(object sender, RoutedEventArgs e)
+        private void SalvarArquivoImagem()
         {
+            if (Print == null)
+                return;
+
+            string filePath = $"Prints\\{inputName.Text}.png";
             if (string.IsNullOrEmpty(inputName.Text))
             {
                 MessageBox.Show("Favor inserir nome do arquivo.");
                 return;
             }
-
-            Print.Save($"Prints\\{inputName.Text}.png", ImageFormat.Png);
-            _FileName = $"Prints\\{inputName.Text}.png";
+            Print.Save(filePath, ImageFormat.Png);
+            _FileName = filePath;
             MessageBox.Show($"Arquivo {inputName.Text}.png salvo.");
         }
 
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         public static extern bool DeleteObject(IntPtr hObject);
-
         private void Carregar(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
-
             // Defina as propriedades do OpenFileDialog conforme necessário
             openFileDialog.Title = "Selecionar Arquivo";
             openFileDialog.Filter = "Arquivos PNG|*.png|Todos os Arquivos|*.*";
             openFileDialog.DefaultExt = "png";
-
             // Defina o diretório inicial relativo à aplicação
             string diretorioInicial = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Prints");
             openFileDialog.InitialDirectory = diretorioInicial;
-
             // Abra o diálogo e verifique se o usuário selecionou um arquivo
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -100,11 +110,9 @@ namespace AutomateClickerBrielina.Controls
                 inputName.Text = caminhoDoArquivo;
                 inputName.IsReadOnly = true;
                 _FileName = caminhoDoArquivo;
-
                 // Faça algo com o caminho do arquivo, como exibir em uma caixa de texto
             }
         }
-
         private BitmapImage buscarImage(string caminho)
         {
             // Crie um objeto BitmapImage e atribua-o à propriedade Source do Image
@@ -112,14 +120,18 @@ namespace AutomateClickerBrielina.Controls
             bitmapImage.BeginInit();
             bitmapImage.UriSource = new Uri(caminho, UriKind.RelativeOrAbsolute);
             bitmapImage.EndInit();
-
             return bitmapImage;
         }
 
         private void AdicionarClique(object sender, RoutedEventArgs e)
         {
-            MainWindow.Cliques.Add(new Clique()
+            if (!tentaExcluirPrintDuplicado())
+                return;
+
+            SalvarArquivoImagem();
+            CliquesControlador.Add(new Clique()
             {
+                Tipo = TipoCliqueEnum.Imagem,
                 FileName = _FileName,
                 Imagem = true,
                 PosSleep = 0,
@@ -129,7 +141,67 @@ namespace AutomateClickerBrielina.Controls
                 posX = 0,
                 posY = 0
             });
-            this.Close();
+
+            if (Print != null)
+                Print.Dispose();
+            Window.GetWindow(this).Close();
+            new GerenciaFluxo().Show();
+        }
+        private void EditarClique(object sender, RoutedEventArgs e)
+        {
+            if (!tentaExcluirPrintDuplicado())
+                return;
+
+            SalvarArquivoImagem();
+            _clique.FileName = _FileName;
+            CliquesControlador.Edit(_clique);
+            if (Print != null)
+                Print.Dispose();
+            Window.GetWindow(this).Close();
+            new GerenciaFluxo().Show();
+        }
+
+        bool tentaExcluirPrintDuplicado()
+        {
+            string filePath = $"Prints\\{inputName.Text}.png";
+            if (System.IO.File.Exists(filePath))
+            {
+                try
+                {
+                    System.IO.File.Delete(filePath);
+                    return true;
+                }
+                catch
+                {
+                    MessageBox.Show($"Arquivo {inputName.Text}.png em uso, tente novamente ou escolha outro nome.");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void FecharJanela(object sender, RoutedEventArgs e)
+        {
+            if (Print != null)
+                Print.Dispose();
+            Window.GetWindow(this).Close();
+        }
+        private void NovoPrint(object sender, RoutedEventArgs e)
+        {
+            if (Print != null)
+                Print.Dispose();
+            (Window.GetWindow(this) as CliquesAdionador).Fechar(false);
+            switch (_funcaoCrudCliqueEnum)
+            {
+                case FuncaoCrudCliqueEnum.Adicionar:
+                    new Transparente(_funcaoCrudCliqueEnum, TipoCliqueEnum.Imagem).Show();
+                    break;
+                case FuncaoCrudCliqueEnum.Editar:
+                    new Transparente(_funcaoCrudCliqueEnum, TipoCliqueEnum.Imagem, null, _clique).Show();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
