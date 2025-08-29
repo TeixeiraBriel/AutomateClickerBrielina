@@ -176,6 +176,26 @@ namespace AutomateClickerBrielina
                 imprimeConsole("Comando finalizar enviado.");
             }
             cancelamentoSolicitado = false;
+            statusBtnsCliques(false);
+        }
+
+        public void statusBtnsCliques(bool Executando)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                if (Executando)
+                {
+                    btnIniciar.IsEnabled = false;
+                    btnLoop.IsEnabled = false;
+                    btnStop.IsEnabled = true;
+                }
+                else
+                {
+                    btnIniciar.IsEnabled = true;
+                    btnLoop.IsEnabled = true;
+                    btnStop.IsEnabled = false;
+                }
+            }));
         }
 
         public async void imprimeConsole(string message)

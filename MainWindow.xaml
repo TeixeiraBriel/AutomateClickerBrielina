@@ -25,13 +25,13 @@
         <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
             <Label Content="Menu" HorizontalAlignment="Center"/>
             <StackPanel x:Name="PainelBotoes">
-                <Button Content="Iniciar" Width="100" Margin="2" Click="btnInciarClick"/>
+                <Button Content="Iniciar" Name="btnIniciar" Width="100" Margin="2" Click="btnInciarClick"/>
+                <Button Content="Loop" Name="btnLoop" Width="100" Margin="2" Click="btnLoopClick"/>
+                <Button Content="Stop"  Name="btnStop" Width="100" Margin="2" Click="btnStopClick" IsEnabled="False"/>
                 <Button Content="Gerenciar" Width="100" Margin="2" Click="btnGerenciarClick"/>
-                <Button Content="Loop" Width="100" Margin="2" Click="btnLoopClick"/>
                 <Button Content="Saves" Width="100" Margin="2" Click="btnSavesClick"/>
-                <Button Content="Teste" Width="100" Margin="2" Click="btnTesteClick"/>
+                <Button Visibility="Collapsed" Content="Teste" Width="100" Margin="2" Click="btnTesteClick"/>
             </StackPanel>
-            <Button Content="Stop" Width="100" Margin="2" Click="btnStopClick"/>
             <Label Name="NumExec"/>
             <Label Name="NumCliques"/>
             <Label Name="NumCliquesGeral"/>

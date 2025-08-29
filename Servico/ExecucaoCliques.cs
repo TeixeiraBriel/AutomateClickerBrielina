@@ -22,6 +22,7 @@ namespace AutomateClickerBrielina.Servico
             lacoCliques = new Thread(async () =>
             {
                 MainWindow.imprimeConsole($"Inicio Execução.");
+                MainWindow.statusBtnsCliques(true);
                 do
                 {
 
@@ -38,6 +39,7 @@ namespace AutomateClickerBrielina.Servico
                     }
                 } while (loop);
 
+                MainWindow.statusBtnsCliques(false);
                 MainWindow.imprimeConsole($"Fim Execução.");
             });
             lacoCliques.SetApartmentState(ApartmentState.MTA);
