@@ -46,7 +46,7 @@ namespace AutomateClickerBrielina.Controls
                 {
                     if (clique.Imagem)
                     {
-                        (bool Existe, int X, int Y) saida = CapturaTelas.ValidaMoveImagem(clique.FileName);
+                        (bool Existe, int X, int Y) saida = CapturaTelas.ValidaImagem(clique.FileName);
                         if (saida.Existe)
                         {
                             clique.posX = saida.X;
@@ -70,7 +70,7 @@ namespace AutomateClickerBrielina.Controls
                 {
                     if (clique.Imagem)
                     {
-                        (bool Existe, int X, int Y) saida = CapturaTelas.ValidaMoveImagem(clique.FileName);
+                        (bool Existe, int X, int Y) saida = CapturaTelas.ValidaImagem(clique.FileName);
                         if (saida.Existe)
                         {
                             clique.posX = saida.X;
@@ -162,6 +162,15 @@ namespace AutomateClickerBrielina.Controls
         {
             new Transparente(FuncaoCrudCliqueEnum.Adicionar, TipoCliqueEnum.Imagem, null).Show();
             this.Close();
+        }
+
+        private void AdicionarCliquePixelClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(" Funcionalidade ainda inexistente." +
+                          "\n No futuro, poderemos escolher" +
+                          "\n uma área onde procuraremos por " +
+                          "\n um pixel específico." +
+                          "\n   Obrigado pelo apoio!", "Função não implementada");
         }
     }
 }

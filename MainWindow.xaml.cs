@@ -14,6 +14,7 @@ using AutomateClickerBrielina.Entidades;
 using AutomateClickerBrielina.Util;
 using System.Runtime.InteropServices;
 using AutomateClickerBrielina.Servico;
+using System.Reflection;
 
 namespace AutomateClickerBrielina
 {
@@ -39,7 +40,10 @@ namespace AutomateClickerBrielina
         {
             InitializeComponent();
             janelaAtiva = AutoIt.AutoItX.WinGetTitle("[ACTIVE]");
-            CliquesControlador = new CliquesControlador();
+            CliquesControlador = new CliquesControlador(); 
+            
+            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            versionLbl.Content = "Versão " + version;
         }
 
         #region Botões Cliques
@@ -57,7 +61,6 @@ namespace AutomateClickerBrielina
         {
             new GerenciaFluxo().Show();
         }
-
         private void btnStopClick(object sender, RoutedEventArgs e)
         {
             cancelamentoSolicitado = true;
@@ -137,7 +140,7 @@ namespace AutomateClickerBrielina
         private void btnTesteClick(object sender, RoutedEventArgs e)
         {
             var teste = CapturaTelas.ListaNomesPrints();
-            (bool Existe, int X, int Y) saida = CapturaTelas.ValidaMoveImagem(teste.LastOrDefault());
+            (bool Existe, int X, int Y) saida = CapturaTelas.ValidaImagem(teste.LastOrDefault());
             if (saida.Existe)
             {
                 AutoItX.MouseMove(saida.X, saida.Y);
