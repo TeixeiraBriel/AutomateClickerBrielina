@@ -57,7 +57,6 @@ namespace AutomateClickerBrielina
         {
             new GerenciaFluxo().Show();
         }
-
         private void btnStopClick(object sender, RoutedEventArgs e)
         {
             cancelamentoSolicitado = true;
@@ -137,7 +136,7 @@ namespace AutomateClickerBrielina
         private void btnTesteClick(object sender, RoutedEventArgs e)
         {
             var teste = CapturaTelas.ListaNomesPrints();
-            (bool Existe, int X, int Y) saida = CapturaTelas.ValidaMoveImagem(teste.LastOrDefault());
+            (bool Existe, int X, int Y) saida = CapturaTelas.ValidaImagem(teste.LastOrDefault());
             if (saida.Existe)
             {
                 AutoItX.MouseMove(saida.X, saida.Y);

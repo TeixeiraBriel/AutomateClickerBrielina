@@ -16,6 +16,6 @@
                 <!--<Button Content="Adicionar Pixel" Margin="5" Click="AdicionarCliquePixelClick"/>-->
             </StackPanel>
             <StackPanel x:Name="PainelFluxo"/>
-        </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>
