@@ -14,6 +14,7 @@ using AutomateClickerBrielina.Entidades;
 using AutomateClickerBrielina.Util;
 using System.Runtime.InteropServices;
 using AutomateClickerBrielina.Servico;
+using System.Reflection;
 
 namespace AutomateClickerBrielina
 {
@@ -39,7 +40,10 @@ namespace AutomateClickerBrielina
         {
             InitializeComponent();
             janelaAtiva = AutoIt.AutoItX.WinGetTitle("[ACTIVE]");
-            CliquesControlador = new CliquesControlador();
+            CliquesControlador = new CliquesControlador(); 
+            
+            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            versionLbl.Content = "Versão " + version;
         }
 
         #region Botões Cliques

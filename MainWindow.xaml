@@ -36,6 +36,7 @@
             <Label Name="NumCliques"/>
             <Label Name="NumCliquesGeral"/>
         </StackPanel>
+        <Label x:Name="versionLbl" Content="Versao" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="10" Grid.Row="3" Grid.Column="1" />
 
         <Label x:Name="AvisoLbl" Content="BuscandoJanela" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center" Foreground="Green" Visibility="Hidden"/>
 
