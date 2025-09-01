@@ -73,8 +73,9 @@ namespace AutomateClickerBrielina.Controls
             Bitmap bitmap = CapturaTelas.CapturaSelecao(6, 6, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             PrintTela = bitmap;
             BitmapImage bitmapImage = ConvertBitmapToBitmapImage(bitmap);
-            imagePanel.Source = bitmapImage;
-            Opacity = 1;
+            imagePanel.Source = bitmapImage; 
+            imagePanel.Opacity = 0.8;
+            backgroundPanel.Background = new SolidColorBrush(Colors.Black);
         }
 
         private void MainWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -121,8 +122,8 @@ namespace AutomateClickerBrielina.Controls
                     isDragging = false;
 
                     // Exemplo: Obtendo coordenadas e tamanho após o arrasto
-                    int left = int.Parse(startPoint.X.ToString());
-                    int top = int.Parse(startPoint.Y.ToString());
+                    int left = int.Parse(startPoint.X.ToString()) + 1;
+                    int top = int.Parse(startPoint.Y.ToString()) + 2;
                     System.Windows.Point finalPoint = e.GetPosition(this);
                     int width = int.Parse((finalPoint.X - startPoint.X).ToString());
                     int height = int.Parse((finalPoint.Y - startPoint.Y).ToString());
