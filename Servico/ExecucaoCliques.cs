@@ -107,7 +107,7 @@ namespace AutomateClickerBrielina.Servico
                     break;
                 case Enums.TipoCliqueEnum.Imagem:
                     clique.Sucesso = false;
-                    (bool Existe, int X, int Y) saida = CapturaTelas.ValidaMoveImagem(clique.FileName);
+                    (bool Existe, int X, int Y) saida = CapturaTelas.ValidaImagem(clique.FileName);
                     clique.posX = saida.X;
                     clique.posY = saida.Y;
                     clique.Sucesso = saida.Existe;
