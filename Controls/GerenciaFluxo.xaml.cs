@@ -163,5 +163,14 @@ namespace AutomateClickerBrielina.Controls
             new Transparente(FuncaoCrudCliqueEnum.Adicionar, TipoCliqueEnum.Imagem, null).Show();
             this.Close();
         }
+
+        private void AdicionarCliquePixelClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(" Funcionalidade ainda inexistente." +
+                          "\n No futuro, poderemos escolher" +
+                          "\n uma área onde procuraremos por " +
+                          "\n um pixel específico." +
+                          "\n   Obrigado pelo apoio!", "Função não implementada");
+        }
     }
 }

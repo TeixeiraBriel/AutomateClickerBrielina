@@ -122,8 +122,8 @@ namespace AutomateClickerBrielina.Controls
                     isDragging = false;
 
                     // Exemplo: Obtendo coordenadas e tamanho após o arrasto
-                    int left = int.Parse(startPoint.X.ToString()) - 3;
-                    int top = int.Parse(startPoint.Y.ToString()) + 3;
+                    int left = int.Parse(startPoint.X.ToString()) - 2;
+                    int top = int.Parse(startPoint.Y.ToString()) + 2;
                     System.Windows.Point finalPoint = e.GetPosition(this);
                     int width = int.Parse((finalPoint.X - startPoint.X).ToString());
                     int height = int.Parse((finalPoint.Y - startPoint.Y).ToString());

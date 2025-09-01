@@ -11,9 +11,9 @@
             <StackPanel Height="30" Width="770" Margin="5" Background="LightGray" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock Text="Ao escolher tipo de clique em sequencia ja seleciona a area desejada." Margin="15,5,5,5"/>
                 <!--<Button Content="Adicionar Clique" Margin="5" Click="AdicionarCliqueClick"/>-->
-                <Button Content="Adicionar Posicional" Margin="5" Click="AdicionarCliquePosicionalClick"/>
-                <Button Content="Adicionar Imagem" Margin="5" Click="AdicionarCliqueImagemClick"/>
-                <!--<Button Content="Adicionar Pixel" Margin="5" Click="AdicionarCliquePixelClick"/>-->
+                <Button Content="Adicionar Posicional" Width="110" Margin="5" Click="AdicionarCliquePosicionalClick"/>
+                <Button Content="Adicionar Imagem" Width="110" Margin="5" Click="AdicionarCliqueImagemClick"/>
+                <Button Content="Adicionar Pixel" Width="110" Margin="5" Click="AdicionarCliquePixelClick"/>
             </StackPanel>
             <ScrollViewer Width="auto" Height="auto">
                 <StackPanel x:Name="PainelFluxo"/>
