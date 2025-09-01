@@ -58,6 +58,9 @@ namespace AutomateClickerBrielina.Controls
 
         private void AdicionarCliqueClick(object sender, RoutedEventArgs e)
         {
+            if (PosXVal > 0 || PosYVal > 0)
+                CliqueSelecionado = true;
+
             if (!string.IsNullOrEmpty(CliqueQtdInput.Text) &&
                 !string.IsNullOrEmpty(CliquesintervaloInput.Text) &&
                 !string.IsNullOrEmpty(PreIntervaloInput.Text) &&
@@ -73,7 +76,7 @@ namespace AutomateClickerBrielina.Controls
                 CliqueSelecionado = false;
             }
 
-            (Window.GetWindow(this) as CliquesAdionador).Fechar();
+            Window.GetWindow(this).Close();  
         }
 
         private void EditarCliqueClick(object sender, RoutedEventArgs e)
@@ -91,7 +94,7 @@ namespace AutomateClickerBrielina.Controls
             };
             CliquesControlador.Edit(newCliqueLocal);
 
-            (Window.GetWindow(this) as CliquesAdionador).Fechar();
+            Window.GetWindow(this).Close();
         }
 
         private void SelecionarCliqueClick(object sender, RoutedEventArgs e)
@@ -102,7 +105,10 @@ namespace AutomateClickerBrielina.Controls
             CliqueSelecionado = true;
 
             AdicionarCliqueBtnsPanel.IsEnabled = false;
-        }
+
+            (Window.GetWindow(this) as CliquesAdionador).previnirAbrirGerenciadorFluxo = true;  
+            Window.GetWindow(this).Close();
+        }        
 
         private void AdicionarClick()
         {

@@ -1,6 +1,7 @@
 ﻿using AutomateClickerBrielina.Enums;
 using AutomateClickerBrielina.Servico;
 using AutomateClickerBrielina.Util;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -29,7 +30,15 @@ namespace AutomateClickerBrielina.Controls
             foreach (var clique in CliquesControlador.Cliques)
             {
                 StackPanel painel = new StackPanel() { Orientation = Orientation.Horizontal };
-                painel.Children.Add(new Label() { Content = $"{clique.Tipo}: PosX:{clique.posX} PosY:{clique.posY} Qtd:{clique.qtdCliques}" });
+                switch (clique.Tipo)
+                {
+                    case TipoCliqueEnum.Posicional:
+                        painel.Children.Add(new Label() { Content = $"{clique.Tipo}: PosX:{clique.posX} PosY:{clique.posY} Qtd:{clique.qtdCliques}" });
+                        break;
+                    case TipoCliqueEnum.Imagem:
+                        painel.Children.Add(new Label() { Content = $"{clique.Tipo}: {clique.FileName.Split('\\').LastOrDefault()}" });
+                        break;
+                }
 
                 Button btnMove = new Button();
                 btnMove.Content = "Move";
@@ -138,6 +147,20 @@ namespace AutomateClickerBrielina.Controls
             CliquesAdionador cliquesAdionador = new CliquesAdionador();
             cliquesAdionador.JanelaCliquesAdionador.Navigate(page);
             cliquesAdionador.Show();
+            this.Close();
+        }
+
+        private void AdicionarCliquePosicionalClick(object sender, RoutedEventArgs e)
+        {
+            var janelaBase = new AdicionarCliquePosicional(FuncaoCrudCliqueEnum.Adicionar, null);
+            Transparente novaJanelaTransparente = new Transparente(FuncaoCrudCliqueEnum.Adicionar ,TipoCliqueEnum.Posicional, janelaBase, null);
+            novaJanelaTransparente.Show();
+            this.Close();
+        }
+
+        private void AdicionarCliqueImagemClick(object sender, RoutedEventArgs e)
+        {
+            new Transparente(FuncaoCrudCliqueEnum.Adicionar, TipoCliqueEnum.Imagem, null).Show();
             this.Close();
         }
     }

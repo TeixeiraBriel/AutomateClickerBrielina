@@ -73,20 +73,21 @@ namespace AutomateClickerBrielina.Controls
             DeleteObject(hBitmap);
             return bitmapSource;
         }
-        private void SalvarArquivoImagem()
+        private bool SalvarArquivoImagem()
         {
             if (Print == null)
-                return;
+                return false;
 
             string filePath = $"Prints\\{inputName.Text}.png";
             if (string.IsNullOrEmpty(inputName.Text))
             {
                 MessageBox.Show("Favor inserir nome do arquivo.");
-                return;
+                return false;
             }
             Print.Save(filePath, ImageFormat.Png);
             _FileName = filePath;
-            MessageBox.Show($"Arquivo {inputName.Text}.png salvo.");
+            //MessageBox.Show($"Arquivo {inputName.Text}.png salvo.");
+            return  true;
         }
 
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
@@ -128,7 +129,9 @@ namespace AutomateClickerBrielina.Controls
             if (!tentaExcluirPrintDuplicado())
                 return;
 
-            SalvarArquivoImagem();
+            if (!SalvarArquivoImagem())
+                return;
+
             CliquesControlador.Add(new Clique()
             {
                 Tipo = TipoCliqueEnum.Imagem,
@@ -145,20 +148,20 @@ namespace AutomateClickerBrielina.Controls
             if (Print != null)
                 Print.Dispose();
             Window.GetWindow(this).Close();
-            new GerenciaFluxo().Show();
         }
         private void EditarClique(object sender, RoutedEventArgs e)
         {
             if (!tentaExcluirPrintDuplicado())
                 return;
 
-            SalvarArquivoImagem();
+            if (!SalvarArquivoImagem())
+                return;
+
             _clique.FileName = _FileName;
             CliquesControlador.Edit(_clique);
             if (Print != null)
                 Print.Dispose();
             Window.GetWindow(this).Close();
-            new GerenciaFluxo().Show();
         }
 
         bool tentaExcluirPrintDuplicado()
@@ -190,7 +193,8 @@ namespace AutomateClickerBrielina.Controls
         {
             if (Print != null)
                 Print.Dispose();
-            (Window.GetWindow(this) as CliquesAdionador).Fechar(false);
+            (Window.GetWindow(this) as CliquesAdionador).previnirAbrirGerenciadorFluxo = true;  
+            Window.GetWindow(this).Close();
             switch (_funcaoCrudCliqueEnum)
             {
                 case FuncaoCrudCliqueEnum.Adicionar:

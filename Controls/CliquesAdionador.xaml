@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AutomateClickerBrielina.Controls"
         mc:Ignorable="d"
-        Title="CliquesAdionador" Height="222" Width="302">
-    <Grid>
+        Title="CliquesAdionador" Height="300" Width="350">
+    <Grid Background="LightGray">
         <StackPanel 
             x:Name="AdicionarCliquePanel" 
             Visibility="Visible"
-            Background="LightGray"
-            Margin="5">
+            Margin="5"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
             <Frame x:Name="JanelaCliquesAdionador" />
         </StackPanel>
     </Grid>

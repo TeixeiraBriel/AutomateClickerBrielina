@@ -41,7 +41,7 @@ namespace AutomateClickerBrielina.Controls
 
         private void PorImagemClick(object sender, RoutedEventArgs e)
         {
-            (Window.GetWindow(this) as CliquesAdionador).Fechar(false);  
+            Window.GetWindow(this).Close();  
             new Transparente(_funcaoCrudCliqueEnum, TipoCliqueEnum.Imagem, null, _refClique).Show();
         }
     }

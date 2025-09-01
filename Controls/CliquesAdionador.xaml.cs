@@ -21,16 +21,22 @@ namespace AutomateClickerBrielina.Controls
     /// </summary>
     public partial class CliquesAdionador : Window
     {
+        public bool previnirAbrirGerenciadorFluxo = false;
+
         public CliquesAdionador()
         {
             InitializeComponent();
-        }
-
-        public void Fechar(bool AbrirGerenciaFluxo = true)
-        {
-            this.Close();
-            if (AbrirGerenciaFluxo)
-                new GerenciaFluxo().Show();
+            Closing += (s, e) =>
+            {
+                if (!previnirAbrirGerenciadorFluxo)
+                {
+                    new GerenciaFluxo().Show();
+                }
+                else
+                {
+                    previnirAbrirGerenciadorFluxo = false ; 
+                }
+            };
         }
     }
 }

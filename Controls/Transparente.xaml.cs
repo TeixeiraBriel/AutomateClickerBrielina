@@ -86,7 +86,7 @@ namespace AutomateClickerBrielina.Controls
                 
                 if (_oldClique == null)
                 {
-                    Clique newClique = new Clique() { posX = valor.X, posY = valor.Y };
+                    Clique newClique = new Clique() { posX = valor.X, posY = valor.Y, qtdCliques= 1 };
                     JanelaPaiPosicional._clique = newClique;
                 }
                 else
@@ -98,7 +98,7 @@ namespace AutomateClickerBrielina.Controls
 
                 JanelaPaiPosicional.preencheCamposDados();
                 JanelaPaiPosicional.AdicionarCliqueBtnsPanel.IsEnabled = true;
-                this.Close();
+                NavegarCliquesAdionador(JanelaPaiPosicional);
             }
         }
 
@@ -130,9 +130,7 @@ namespace AutomateClickerBrielina.Controls
                     this.Close();
                     //System.Threading.Thread.Sleep(1000);
                     var print = CapturaTelas.CapturaSelecaoFromImage(PrintTela, left, top, width, height);
-                    CliquesAdionador cliquesAdionador = new CliquesAdionador();
-                    cliquesAdionador.JanelaCliquesAdionador.Navigate(new SalvarPrint(_funcaoCrudCliqueEnum, print, _oldClique));
-                    cliquesAdionador.Show();
+                    NavegarCliquesAdionador(new SalvarPrint(_funcaoCrudCliqueEnum, print, _oldClique));
                 }
             }
             catch (Exception ex)
@@ -159,6 +157,13 @@ namespace AutomateClickerBrielina.Controls
 
                 return bitmapImage;
             }
+        }
+        void NavegarCliquesAdionador(Page page)
+        {
+            CliquesAdionador cliquesAdionador = new CliquesAdionador();
+            cliquesAdionador.JanelaCliquesAdionador.Navigate(page);
+            cliquesAdionador.Show();
+            this.Close();
         }
     }
 }

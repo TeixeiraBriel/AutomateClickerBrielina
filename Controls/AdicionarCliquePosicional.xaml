@@ -35,8 +35,8 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" x:Name="AdicionarCliqueBtnsPanel">
-                <Button Content="Selecionar" Click="SelecionarCliqueClick" Width="100" Margin="0,5,5,0"/>
-                <Button Content="Adicionar" Name="btnConcluir" Width="100" Margin="0,5,0,0"/>
+                <Button Content="Tentar Novamente" Click="SelecionarCliqueClick" Width="120" Margin="0,5,5,0"/>
+                <Button Content="Adicionar" Name="btnConcluir" Width="120" Margin="0,5,0,0"/>
             </StackPanel>
         </StackPanel>
     </Grid>
