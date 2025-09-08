@@ -37,6 +37,7 @@ namespace AutomateClickerBrielina.Controls
             {
                 _clique = clique;
                 preencheCamposDados();
+                btnTentarNovamente.Content = "Trocar Posição";
                 btnConcluir.Content = "Editar";
                 btnConcluir.Click += (s, e) => EditarCliqueClick(s, e);
             }

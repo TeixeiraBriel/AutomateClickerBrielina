@@ -35,8 +35,13 @@ namespace AutomateClickerBrielina.Controls
 
         private void PosicionalClick(object sender, RoutedEventArgs e)
         {
-            _janelaPai = Window.GetWindow(this) as CliquesAdionador;
-            _janelaPai.JanelaCliquesAdionador.Navigate(new AdicionarCliquePosicional(_funcaoCrudCliqueEnum, _refClique));
+            //_janelaPai = Window.GetWindow(this) as CliquesAdionador;
+            //_janelaPai.JanelaCliquesAdionador.Navigate(new AdicionarCliquePosicional(_funcaoCrudCliqueEnum, _refClique));
+
+            var janelaBase = new AdicionarCliquePosicional(_funcaoCrudCliqueEnum, _refClique);
+            (Window.GetWindow(this) as CliquesAdionador).previnirAbrirGerenciadorFluxo = true;  
+            Window.GetWindow(this).Close();
+            new Transparente(FuncaoCrudCliqueEnum.Adicionar ,TipoCliqueEnum.Posicional, janelaBase).Show();
         }
 
         private void PorImagemClick(object sender, RoutedEventArgs e)
