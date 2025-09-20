@@ -78,16 +78,19 @@ namespace AutomateClickerBrielina.Controls
             if (Print == null)
                 return false;
 
-            string filePath = $"Prints\\{inputName.Text}.png";
-            if (string.IsNullOrEmpty(inputName.Text))
+            if (!inputName.IsReadOnly)
             {
-                MessageBox.Show("Favor inserir nome do arquivo.");
-                return false;
+                string filePath = $"Prints\\{inputName.Text}.png";
+                if (string.IsNullOrEmpty(inputName.Text))
+                {
+                    MessageBox.Show("Favor inserir nome do arquivo.");
+                    return false;
+                }
+                Print.Save(filePath, ImageFormat.Png);
+                _FileName = filePath;
             }
-            Print.Save(filePath, ImageFormat.Png);
-            _FileName = filePath;
             //MessageBox.Show($"Arquivo {inputName.Text}.png salvo.");
-            return  true;
+            return true;
         }
 
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
@@ -193,7 +196,7 @@ namespace AutomateClickerBrielina.Controls
         {
             if (Print != null)
                 Print.Dispose();
-            (Window.GetWindow(this) as CliquesAdionador).previnirAbrirGerenciadorFluxo = true;  
+            (Window.GetWindow(this) as CliquesAdionador).previnirAbrirGerenciadorFluxo = true;
             Window.GetWindow(this).Close();
             switch (_funcaoCrudCliqueEnum)
             {
