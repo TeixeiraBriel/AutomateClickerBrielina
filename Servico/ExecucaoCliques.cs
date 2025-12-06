@@ -2,6 +2,7 @@
 using AutomateClickerBrielina.Entidades;
 using AutomateClickerBrielina.Util;
 using Newtonsoft.Json.Linq;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,31 +20,39 @@ namespace AutomateClickerBrielina.Servico
 
         public void Inicia(bool loop, CliquesControlador cliquesControlador)
         {
-            lacoCliques = new Thread(async () =>
+            try
             {
-                MainWindow.imprimeConsole($"Inicio Execução.");
-                MainWindow.statusBtnsCliques(true);
-                do
+                lacoCliques = new Thread(async () =>
                 {
-
-                    if (loop)
+                    MainWindow.imprimeConsole($"Inicio Execução.");
+                    MainWindow.statusBtnsCliques(true);
+                    do
                     {
-                        int tempoSeguranca = 5;
-                        MainWindow.imprimeConsole($"Pausa de segurança {tempoSeguranca}s");
-                        Esperar(tempoSeguranca);
-                    }
 
-                    foreach (var clique in cliquesControlador.Cliques)
-                    {
-                        RealizaClique(clique);
-                    }
-                } while (loop);
+                        if (loop)
+                        {
+                            int tempoSeguranca = 5;
+                            MainWindow.imprimeConsole($"Pausa de segurança {tempoSeguranca}s");
+                            Esperar(tempoSeguranca);
+                        }
 
-                MainWindow.statusBtnsCliques(false);
-                MainWindow.imprimeConsole($"Fim Execução.");
-            });
-            lacoCliques.SetApartmentState(ApartmentState.MTA);
-            lacoCliques.Start();
+                        foreach (var clique in cliquesControlador.Cliques)
+                        {
+                            RealizaClique(clique);
+                        }
+                    } while (loop);
+
+                    MainWindow.statusBtnsCliques(false);
+                    MainWindow.imprimeConsole($"Fim Execução.");
+                });
+                lacoCliques.SetApartmentState(ApartmentState.MTA);
+                lacoCliques.Start();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                Inicia(loop, cliquesControlador);
+            }
         }
 
         public void Finaliza()
@@ -65,8 +74,8 @@ namespace AutomateClickerBrielina.Servico
                 clique = ValidarCoordenadas(clique);
                 int tentativas = 2;
                 while (!clique.Sucesso && tentativas <= 10)
-                {
-                    MainWindow.imprimeConsole($"Clique {clique.Tipo} tentativa: {tentativas}");
+                {                    
+                    MainWindow.imprimeContadorConsole(clique.Tipo.ToString(), tentativas, 10);
                     clique = ValidarCoordenadas(clique);
                     tentativas++;
                 }
@@ -75,11 +84,17 @@ namespace AutomateClickerBrielina.Servico
                 {
                     ExecutarClique(clique);
 
-                    MainWindow.imprimeConsole($"Clique {clique.Tipo} X:{clique.posX} Y:{clique.posY}");
+                    string textNomeImagem = string.Empty;
+                    if (!string.IsNullOrEmpty(clique.FileName))
+                    {
+                        string nomeArquivo = clique.FileName.Split('\\').LastOrDefault().Replace(".png","");
+                        textNomeImagem = nomeArquivo.Length > 5 ? nomeArquivo.Substring(0, 5) + "..." : nomeArquivo;
+                    }
+                    MainWindow.imprimeConsole($"Clique {clique.Tipo} {textNomeImagem} X:{clique.posX} Y:{clique.posY}");
                 }
                 else
                 {
-                    MainWindow.imprimeConsole($"Clique {clique.Tipo} nome:");
+                    //MainWindow.imprimeConsole($"Clique {clique.Tipo} nome:");
                     MainWindow.imprimeConsole($"    {clique.FileName}");
                     MainWindow.imprimeConsole($"    não encontrado.");
                 }

@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using OpenCvSharp;
+using Serilog;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing.Imaging;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.IO;
-using OpenCvSharp;
 
 
 namespace AutomateClickerBrielina.Util
@@ -101,66 +103,83 @@ namespace AutomateClickerBrielina.Util
 
         public static (bool Existe, int X, int Y) ValidaImagem(string nomeImagem)
         {
-            Bitmap myPic = new Bitmap(nomeImagem);
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            Bitmap screenCapture = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
-
-            Graphics g = Graphics.FromImage(screenCapture);
-            g.CopyFromScreen(Screen.PrimaryScreen.Bounds.X,
-                             Screen.PrimaryScreen.Bounds.Y,
-                             0, 0,
-                             screenCapture.Size,
-                             CopyPixelOperation.SourceCopy);
-            screenCapture.Save($"Prints\\ScreenSearchIn.png", ImageFormat.Png);
-            myPic.Save($"Prints\\ScreenSearchFor.png", ImageFormat.Png);
-
-            (bool Existe, int X, int Y) isInCapture = IsInCaptureOpenCv(myPic, screenCapture);
-
-            if (isInCapture.Existe)
+            using (var myPic = new Bitmap(nomeImagem))
+            using (var screenCapture = new Bitmap(
+                Screen.PrimaryScreen.Bounds.Width,
+                Screen.PrimaryScreen.Bounds.Height))
             {
-                sw.Stop();
-                return (true, isInCapture.X + (myPic.Width / 2), isInCapture.Y + (myPic.Height / 2));
-            }
-            else
-            {
-                sw.Stop();
-                return (false, 0, 0);
-            }
-
-        }
-
-        public static (bool Exists, int X, int Y) IsInCaptureOpenCv(Bitmap templateBmp, Bitmap sourceBmp, double threshold = 0.80)
-        {
-            using (var templateMat = OpenCvSharp.Extensions.BitmapConverter.ToMat(templateBmp))
-            using (var sourceMat = OpenCvSharp.Extensions.BitmapConverter.ToMat(sourceBmp))
-            {
-                // Split template and source into channels
-                Mat[] templateChannels = Cv2.Split(templateMat);
-                Mat[] sourceChannels = Cv2.Split(sourceMat);
-
-                var resultChannels = new Mat[3]; // assuming 3 channels (BGR)
-
-                for (int c = 0; c < 3; c++)
+                using (Graphics g = Graphics.FromImage(screenCapture))
                 {
-                    // MatchTemplate for each channel
-                    resultChannels[c] = new Mat();
-                    Cv2.MatchTemplate(sourceChannels[c], templateChannels[c], resultChannels[c], TemplateMatchModes.CCoeffNormed);
+                    g.CopyFromScreen(
+                        Screen.PrimaryScreen.Bounds.X,
+                        Screen.PrimaryScreen.Bounds.Y,
+                        0,
+                        0,
+                        screenCapture.Size,
+                        CopyPixelOperation.SourceCopy);
                 }
 
-                // Average the results per pixel
-                Mat colorResult = (resultChannels[0] + resultChannels[1] + resultChannels[2]) / 3.0;
+                // opcional: salvar para debug
+                screenCapture.Save($"Prints\\ScreenSearchIn.png", ImageFormat.Png);
+                myPic.Save($"Prints\\ScreenSearchFor.png", ImageFormat.Png);
 
-                // Find best match in the averaged result
-                Cv2.MinMaxLoc(colorResult, out double minVal, out double maxVal, out OpenCvSharp.Point minLoc, out OpenCvSharp.Point maxLoc);
+                var isInCapture = IsInCaptureOpenCv(myPic, screenCapture);
 
-                if (maxVal >= threshold)
-                    return (true, maxLoc.X, maxLoc.Y);
+                if (isInCapture.Existe)
+                {
+                    return (
+                        true,
+                        isInCapture.X + (myPic.Width / 2),
+                        isInCapture.Y + (myPic.Height / 2)
+                    );
+                }
+
+                return (false, 0, 0);
             }
-
-            return (false, 0, 0);
         }
 
+
+        public static (bool Existe, int X, int Y) IsInCaptureOpenCv(
+            Bitmap templateBmp, Bitmap sourceBmp, double threshold = 0.80)
+        {
+            try
+            {
+                // Normalizar Bitmap para formato fixo
+                using (var tplNorm = templateBmp.Clone(
+                    new Rectangle(0, 0, templateBmp.Width, templateBmp.Height),
+                    System.Drawing.Imaging.PixelFormat.Format24bppRgb))
+                using (var srcNorm = sourceBmp.Clone(
+                    new Rectangle(0, 0, sourceBmp.Width, sourceBmp.Height),
+                    System.Drawing.Imaging.PixelFormat.Format24bppRgb))
+                using (var templateMat = OpenCvSharp.Extensions.BitmapConverter.ToMat(tplNorm))
+                using (var sourceMat = OpenCvSharp.Extensions.BitmapConverter.ToMat(srcNorm))
+                using (var templateGray = new Mat())
+                using (var sourceGray = new Mat())
+                using (var result = new Mat())
+                {
+                    Cv2.CvtColor(templateMat, templateGray, ColorConversionCodes.BGR2GRAY);
+                    Cv2.CvtColor(sourceMat, sourceGray, ColorConversionCodes.BGR2GRAY);
+
+                    if (templateGray.Width > sourceGray.Width ||
+                        templateGray.Height > sourceGray.Height)
+                    {
+                        return (false, 0, 0);
+                    }
+
+                    Cv2.MatchTemplate(sourceGray, templateGray, result, TemplateMatchModes.CCoeffNormed);
+                    Cv2.MinMaxLoc(result, out _, out double maxVal, out _, out OpenCvSharp.Point maxLoc);
+
+                    if (maxVal >= threshold)
+                        return (true, maxLoc.X, maxLoc.Y);
+
+                    return (false, 0, 0);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return (false, 0, 0);
+            }
+        }
     }
 }

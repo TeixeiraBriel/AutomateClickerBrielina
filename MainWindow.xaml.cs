@@ -15,6 +15,7 @@ using AutomateClickerBrielina.Util;
 using System.Runtime.InteropServices;
 using AutomateClickerBrielina.Servico;
 using System.Reflection;
+using Serilog;
 
 namespace AutomateClickerBrielina
 {
@@ -32,6 +33,7 @@ namespace AutomateClickerBrielina
         CancellationTokenSource cancellationTokenSource;
 
         public static CliquesControlador CliquesControlador;
+        public static ServicoComSerilog ServicoComSerilog;
         public int PosXVal = 0;
         public int PosYVal = 0;
         public bool SelecionarClique = false;
@@ -40,8 +42,9 @@ namespace AutomateClickerBrielina
         {
             InitializeComponent();
             janelaAtiva = AutoIt.AutoItX.WinGetTitle("[ACTIVE]");
-            CliquesControlador = new CliquesControlador(); 
-            
+            CliquesControlador = new CliquesControlador();
+            ServicoComSerilog = new ServicoComSerilog();
+
             var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             versionLbl.Content = "Versão " + version;
         }
@@ -158,12 +161,20 @@ namespace AutomateClickerBrielina
 
         void iniciaCliques(bool loop)
         {
-            cancelamentoSolicitado = false;
-            Console.Children.Clear();
-            imprimeConsole($"--CTRL + ENTER para Parar--");
-            execucaoCliques = new ExecucaoCliques() { MainWindow = this };
-            execucaoCliques.Inicia(loop, CliquesControlador);
-            Task.Run(() => PararRobo());
+            try
+            {
+                cancelamentoSolicitado = false;
+                Console.Children.Clear();
+                imprimeConsole($"--CTRL + ENTER para Parar--");
+                execucaoCliques = new ExecucaoCliques() { MainWindow = this };
+                execucaoCliques.Inicia(loop, CliquesControlador);
+                Task.Run(() => PararRobo());
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                throw ex;
+            }
         }
 
         async Task PararRobo()
@@ -206,6 +217,25 @@ namespace AutomateClickerBrielina
             Dispatcher.Invoke(new Action(() =>
             {
                 Console.Children.Add(new Label() { Content = message, Foreground = new SolidColorBrush(Colors.White) });
+                Util.Timer.Para();
+                ScrollConsole.ScrollToEnd();
+            }));
+        }
+
+        public async void imprimeContadorConsole(string Tipo, int tentativaAtual, int TentativaMax)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                if (tentativaAtual == 2)
+                {
+                    Console.Children.Add(new Label() { Content = $"Clique {Tipo} tentativa: {tentativaAtual}/{TentativaMax}", Foreground = new SolidColorBrush(Colors.White) });
+                }
+                else
+                {
+                    Console.Children.RemoveAt(Console.Children.Count -1);
+                    Console.Children.Add(new Label() { Content = $"Clique {Tipo} tentativa: {tentativaAtual}/{TentativaMax}", Foreground = new SolidColorBrush(Colors.White) });
+                }
+
                 Util.Timer.Para();
                 ScrollConsole.ScrollToEnd();
             }));
